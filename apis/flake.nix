@@ -28,8 +28,13 @@
             ...
           }: {
             name = "Apis Mellifera";
+            git.hooks = {
+              enable = true;
+              pre-commit.text = builtins.readFile ./pre-flight-check.sh;
+            };
             imports = [
               std.std.devshellProfiles.default
+              "${extraModulesPath}/git/hooks.nix"
             ];
             cellsFrom = "./comb";
             commands = [
