@@ -1,0 +1,8 @@
+# direnv/direnv
+.direnv
+
+# numtide/devshell
+.data
+
+# nixos/nix
+result*
