@@ -12,9 +12,13 @@
     deploy-rs.url = "github:input-output-hk/deploy-rs";
   };
 
-  # nixpkgs
+  # nixpkgs & home-manager
   inputs = {
+    nixos.follows = "nixos-21-11";
+    home.follows = "home-21-11";
+
     nixos-21-11.url = "github:nixos/nixpkgs/nixos-21.11";
+    home-21-11.url = "github:blaggacao/home-manager/release-21.11-with-nix-profile";
   };
 
   outputs = inputs:
@@ -33,6 +37,10 @@
         (inputs.std.functions "nixosProfiles")
         (inputs.std.functions "homeProfiles")
         (inputs.std.functions "devshellProfiles")
+
+        # suites aggregate profiles
+        (inputs.std.functions "nixosSuites")
+        (inputs.std.functions "homeSuites")
 
         # configurations can be deployed
         (inputs.std.data "nixosConfigurations")

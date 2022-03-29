@@ -21,5 +21,3 @@ if [[ $? != '0' ]]; then
     "Review the output and commit your fixes" >&2
   exit 1
 fi
-
-
