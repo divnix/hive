@@ -3,6 +3,7 @@
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.devshell.url = "github:numtide/devshell";
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.nixos-generators.url = "github:nix-community/nixos-generators";
   inputs.main.url = "path:../.";
   outputs = inputs:
     inputs.flake-utils.lib.eachSystem ["x86_64-linux" "x86_64-darwin"] (
@@ -12,6 +13,7 @@
           (deSystemize system inputs)
           main
           devshell
+          nixos-generators
           ;
         inherit
           (deSystemize system inputs.main.inputs)
@@ -40,6 +42,7 @@
             commands = [
               (withCategory "hexagon" {package = nixpkgs.legacyPackages.treefmt;})
               (withCategory "hexagon" {package = deploy-rs.packages.deploy-rs;})
+              (withCategory "hexagon" {package = nixos-generators.defaultPackage;})
             ];
             packages = [
               # formatters

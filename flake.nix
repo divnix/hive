@@ -9,7 +9,6 @@
   # tools
   inputs = {
     n2c.url = "github:nlewo/nix2container";
-    nixos-generators.url = "github:nix-community/nixos-generators";
     deploy-rs.url = "github:input-output-hk/deploy-rs";
   };
 
