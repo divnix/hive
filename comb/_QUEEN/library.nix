@@ -23,7 +23,7 @@
 in {
   /*
    Synopsis: bearHomeConfiguration username: configuration:
-
+   
    Generate the deployable `homeConfigurations` attribute set in the
    homeConfigurations organelle.
    */
@@ -58,7 +58,7 @@ in {
 
   /*
    Synopsis: bearNixosConfiguration host: configuration:_
-
+   
    Generate the deployable `nixosConfigurations` attribute set in the
    nixosConfigurations organelle.
    */
@@ -78,9 +78,9 @@ in {
 
   /*
    Synopsis: bearDeployConfigurationsFor _systems_
-
+   
    Generate the `output.deploy.nodes` attribute expected by deploy-rs.
-
+   
    Produces:
    {
      reverse-FQDN = {
@@ -138,7 +138,7 @@ in {
     accumulate (map (system: deploy system) systems);
   /*
    Synopsis: summonNixosConfigurationsFor _systems_
-
+   
    Generate the `nixosConfigurations` attribute expected by nixos-generators.
    */
   summonNixosConfigurations = let
