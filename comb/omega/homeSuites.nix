@@ -7,8 +7,8 @@
   inherit (cell) homeProfiles;
 in {
   shell = with homeProfiles; [
-    # blaggacao.homeModules.alacritty
-    # alacritty
+    blaggacao.homeModules.alacritty
+    alacritty
     bat
     broot
     direnv
