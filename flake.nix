@@ -17,7 +17,7 @@
     nixos.follows = "nixos-21-11";
     home.follows = "home-21-11";
 
-    nixos-21-11.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixos-21-11.url = "github:nixos/nixpkgs/release-21.11";
     home-21-11.url = "github:blaggacao/home-manager/release-21.11-with-nix-profile";
   };
 
