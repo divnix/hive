@@ -3,6 +3,7 @@
   inputs.std.url = "github:divnix/std";
   inputs.std.inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.yants.follows = "std/yants";
+  inputs.nixpkgs.follows = "std/nixpkgs";
   inputs.data-merge.url = "github:divnix/data-merge";
 
   # tools
@@ -21,12 +22,17 @@
     home-21-11.url = "github:blaggacao/home-manager/release-21.11-with-nix-profile";
   };
 
+  # individual inputs
+  inputs = {
+    iog-patched-nix.url = "github:kreisys/nix/goodnix-maybe-dont-functor";
+  };
+
   outputs = inputs:
     inputs.std.growOn {
       inherit inputs;
       as-nix-cli-epiphyte = false;
       cellsFrom = ./comb;
-      # debug = ["cells" "queen" "library"];
+      # debug = ["cells" "x86_64-linux"];
       organelles = [
         # modules implement
         (inputs.std.functions "nixosModules")
@@ -59,10 +65,14 @@
     # soil - the first (and only) layer implements adapters for tooling
     {
       # tool: deploy-rs
-      deploy = {};
+      deploy.nodes =
+        # this library function is not _actually_ system spaced
+        inputs.self.x86_64-linux._QUEEN.library.bearDeployConfigurations;
 
       # tool: nixos-generators
-      nixosConfigurations = {};
+      nixosConfigurations =
+        # this library function is not _actually_ system spaced
+        inputs.self.x86_64-linux._QUEEN.library.summonNixosConfigurations;
     };
 
   # --- Flake Local Nix Configuration ----------------------------
