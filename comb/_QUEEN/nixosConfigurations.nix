@@ -7,6 +7,6 @@ in
   builtins.mapAttrs library.bearNixosConfiguration {
     larva = {
       imports = [nixosProfiles.bootstrap];
-      # nixpkgs.system = "x86_64-linux";
+      nixpkgs.system = "x86_64-linux";
     };
   }
