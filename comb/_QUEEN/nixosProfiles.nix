@@ -21,9 +21,6 @@ in {
         target = "/hive/";
       }
     ];
-    isoImage.storeContents = [
-      (builtins.getFlake "${inputs.self}/apis").devShells.${nixpkgs.system}.mellifera
-    ];
 
     boot.loader.systemd-boot.enable = true;
 
