@@ -1,22 +1,19 @@
 {
   description = "Hony from The Hive";
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+  inputs.std.url = "github:divnix/std";
+  inputs.std.inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.devshell.url = "github:numtide/devshell";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.main.url = "path:../.";
+  inputs.deploy-rs.url = "github:input-output-hk/deploy-rs";
   outputs = inputs:
     inputs.flake-utils.lib.eachSystem ["x86_64-linux" "x86_64-darwin"] (
       system: let
-        inherit (inputs.main.inputs.std) deSystemize;
+        inherit (inputs.std) deSystemize;
         inherit
           (deSystemize system inputs)
-          main
-          devshell
-          ;
-        inherit
-          (deSystemize system inputs.main.inputs)
           std
           deploy-rs
+          devshell
           ;
         inherit (deSystemize system std.inputs) nixpkgs;
         withCategory = category: attrset: attrset // {inherit category;};
