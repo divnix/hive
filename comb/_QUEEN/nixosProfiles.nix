@@ -2,7 +2,7 @@
   inputs,
   cell,
 }: let
-  inherit (inputs) nixpkgs;
+  inherit (inputs) nixpkgs iog-patched-nix;
 in {
   bootstrap = {
     config,
@@ -10,6 +10,13 @@ in {
     modulesPath,
     ...
   }: {
+    nix = {
+      package = iog-patched-nix.packages.nix;
+      extraOptions = ''
+        experimental-features = nix-command flakes recursive-nix
+      '';
+    };
+
     networking.domain = "local";
 
     imports = ["${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"];
