@@ -10,6 +10,7 @@
   inputs = {
     n2c.url = "github:nlewo/nix2container";
     deploy-rs.url = "github:input-output-hk/deploy-rs";
+    nixos-generators.url = "github:nix-community/nixos-generators";
   };
 
   # nixpkgs & home-manager
