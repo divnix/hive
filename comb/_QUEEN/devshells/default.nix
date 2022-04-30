@@ -13,6 +13,7 @@ in
       ...
     }: {
       name = "Apis Mellifera";
+      std.docs.enable = false;
       git.hooks = {
         enable = true;
         pre-commit.text = builtins.readFile ./pre-flight-check.sh;
