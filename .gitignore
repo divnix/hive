@@ -1,5 +1,5 @@
-# direnv/direnv
-.direnv
+# direnv/direnv + divnix/std
+.std
 
 # numtide/devshell
 .data

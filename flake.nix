@@ -1,15 +1,14 @@
 {
   description = "The Hive - The secretly open NixOS-Society";
   inputs.std.url = "github:divnix/std";
-  inputs.std.inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+  inputs.std.inputs.nixpkgs.follows = "nixpkgs";
   inputs.yants.follows = "std/yants";
-  inputs.nixpkgs.follows = "std/nixpkgs";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.data-merge.url = "github:divnix/data-merge";
 
   # tools
   inputs = {
     n2c.url = "github:nlewo/nix2container";
-    deploy-rs.url = "github:input-output-hk/deploy-rs";
     nixos-generators.url = "github:nix-community/nixos-generators";
   };
 
@@ -27,10 +26,12 @@
     iog-patched-nix.url = "github:kreisys/nix/goodnix-maybe-dont-functor";
   };
 
-  outputs = inputs:
+  outputs = inputs: let
+    # exports have no system, pick one
+    exports = inputs.self.x86_64-linux;
+  in
     inputs.std.growOn {
       inherit inputs;
-      as-nix-cli-epiphyte = false;
       cellsFrom = ./comb;
       # debug = ["cells" "x86_64-linux"];
       organelles = [
@@ -49,11 +50,11 @@
         (inputs.std.functions "homeSuites")
 
         # configurations can be deployed
-        (inputs.std.data "nixosConfigurations")
+        (inputs.std.data "colmenaConfigurations")
         (inputs.std.data "homeConfigurations")
 
         # devshells can be entered
-        (inputs.std.installables "devShells")
+        (inputs.std.devshells "devshells")
 
         # jobs can be run
         (inputs.std.runnables "jobs")
@@ -64,15 +65,42 @@
     }
     # soil - the first (and only) layer implements adapters for tooling
     {
-      # tool: deploy-rs
-      deploy.nodes =
-        # this library function is not _actually_ system spaced
-        inputs.self.x86_64-linux._QUEEN.library.bearDeployConfigurations;
-
-      # tool: nixos-generators
-      nixosConfigurations =
-        # this library function is not _actually_ system spaced
-        inputs.self.x86_64-linux._QUEEN.library.summonNixosConfigurations;
+      # tool: colmena
+      colmena = let
+        inherit (inputs.nixpkgs.lib.attrsets) foldAttrs recursiveUpdate mapAttrsToList mapAttrs';
+        inherit (inputs.nixpkgs.lib.lists) optionals flatten map;
+        inherit (builtins) attrValues;
+        collect = x:
+          foldAttrs recursiveUpdate {} (flatten (mapAttrsToList (
+              cell: organelles:
+                optionals (organelles ? colmenaConfigurations)
+                (map (mapAttrs' (name: value: {
+                  name =
+                    if name != "meta"
+                    then "${cell}-o-${name}"
+                    else name;
+                  value =
+                    if name == "meta" && (value ? nodeNixpkgs)
+                    then
+                      (
+                        value
+                        // {
+                          nodeNixpkgs =
+                            mapAttrs' (
+                              name: value: {
+                                name = "${cell}-o-${name}";
+                                inherit value;
+                              }
+                            )
+                            value.nodeNixpkgs;
+                        }
+                      )
+                    else value;
+                })) (attrValues organelles.colmenaConfigurations))
+            )
+            x));
+      in
+        collect exports;
     };
 
   # --- Flake Local Nix Configuration ----------------------------
