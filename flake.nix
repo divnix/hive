@@ -20,9 +20,8 @@
     home-21-11.url = "github:blaggacao/home-manager/release-21.11-with-nix-profile";
   };
 
-  # individual inputs
+  # individual extra inputs
   inputs = {
-    iog-patched-nix.url = "github:kreisys/nix/goodnix-maybe-dont-functor";
   };
 
   outputs = {

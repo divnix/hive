@@ -2,7 +2,7 @@
   inputs,
   cell,
 }: let
-  inherit (inputs) nixpkgs iog-patched-nix;
+  inherit (inputs) nixpkgs;
 in {
   bootstrap = {
     config,
@@ -11,7 +11,7 @@ in {
     ...
   }: {
     nix = {
-      package = iog-patched-nix.packages.nix;
+      package = nixpkgs.nix
       extraOptions = ''
         experimental-features = nix-command flakes recursive-nix
       '';

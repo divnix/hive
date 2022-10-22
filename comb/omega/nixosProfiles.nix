@@ -2,11 +2,11 @@
   inputs,
   cell,
 }: let
-  inherit (inputs) nixpkgs iog-patched-nix;
+  inherit (inputs) nixpkgs;
 in {
   iog-patched-nix = {
     nix = {
-      package = iog-patched-nix.packages.nix;
+      package = nixpkgs.nix;
       gc.automatic = true;
       gc.options = "--max-freed $((10 * 1024 * 1024))";
       optimise.automatic = true;
