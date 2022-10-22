@@ -4,14 +4,9 @@
 }: let
   inherit (inputs) nixpkgs;
 in {
-  bootstrap = {
-    config,
-    lib,
-    modulesPath,
-    ...
-  }: {
+  bootstrap = {config, ...}: {
     nix = {
-      package = nixpkgs.nix
+      package = nixpkgs.nix;
       extraOptions = ''
         experimental-features = nix-command flakes recursive-nix
       '';

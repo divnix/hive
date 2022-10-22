@@ -11,11 +11,11 @@ in {
   };
 
   /*
-   Synopsis: bearHomeConfiguration username: configuration:
-   
-   Generate the deployable `homeConfigurations` attribute set in the
-   homeConfigurations organelle.
-   */
+  Synopsis: bearHomeConfiguration username: configuration:
+
+  Generate the deployable `homeConfigurations` attribute set in the
+  homeConfigurations organelle.
+  */
   bearHomeConfiguration = home: username: configuration': let
     homeDirectoryPrefix =
       if nixpkgs.stdenv.hostPlatform.isDarwin
@@ -45,10 +45,10 @@ in {
       pkgs = nixpkgs;
     };
   /*
-   Synopsis: summonNixosConfigurationsFor _systems_
-   
-   Generate the `nixosConfigurations` attribute expected by nixos-generators.
-   */
+  Synopsis: summonNixosConfigurationsFor _systems_
+
+  Generate the `nixosConfigurations` attribute expected by nixos-generators.
+  */
   # summonNixosConfigurations = let
   #   systems = lib.intersectLists (builtins.attrNames inputs.cells) lib.systems.doubles.all;
   #   accumulate = builtins.foldl' inputs.nixpkgs.lib.attrsets.recursiveUpdate {};
