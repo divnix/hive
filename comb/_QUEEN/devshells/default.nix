@@ -6,7 +6,7 @@
   inherit (inputs) nixpkgs std;
   withCategory = category: attrset: attrset // {inherit category;};
 in
-  l.mapAttrs (_: std.std.lib.mkShell) {
+  l.mapAttrs (_: std.lib.dev.mkShell) {
     default = {
       extraModulesPath,
       pkgs,

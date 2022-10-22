@@ -2,21 +2,20 @@
   description = "The Hive - The secretly open NixOS-Society";
   inputs.std.url = "github:divnix/std";
   inputs.std.inputs.nixpkgs.follows = "nixpkgs";
-  inputs.yants.follows = "std/yants";
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-  inputs.data-merge.url = "github:divnix/data-merge";
 
   # tools
   inputs = {
-    n2c.url = "github:nlewo/nix2container";
     nixos-generators.url = "github:nix-community/nixos-generators";
   };
 
   # nixpkgs & home-manager
   inputs = {
-    nixos.follows = "nixos-21-11";
-    home.follows = "home-21-11";
+    nixos.follows = "nixos-22-05";
+    home.follows = "home-22-05";
 
+    nixos-22-05.url = "github:nixos/nixpkgs/release-22.05";
+    home-22-05.url = "github:nix-community/home-manager/release-22.05";
     nixos-21-11.url = "github:nixos/nixpkgs/release-21.11";
     home-21-11.url = "github:blaggacao/home-manager/release-21.11-with-nix-profile";
   };
@@ -26,41 +25,45 @@
     iog-patched-nix.url = "github:kreisys/nix/goodnix-maybe-dont-functor";
   };
 
-  outputs = inputs: let
+  outputs = {
+    std,
+    self,
+    ...
+  } @ inputs: let
     # exports have no system, pick one
-    exports = inputs.self.x86_64-linux;
+    exports = self.x86_64-linux;
   in
-    inputs.std.growOn {
+    std.growOn {
       inherit inputs;
       cellsFrom = ./comb;
       # debug = ["cells" "x86_64-linux"];
-      organelles = [
+      cellBlocks = with std.blockTypes; [
         # modules implement
-        (inputs.std.functions "nixosModules")
-        (inputs.std.functions "homeModules")
-        (inputs.std.functions "devshellModules")
+        (functions "nixosModules")
+        (functions "homeModules")
+        (functions "devshellModules")
 
         # profiles activate
-        (inputs.std.functions "nixosProfiles")
-        (inputs.std.functions "homeProfiles")
-        (inputs.std.functions "devshellProfiles")
+        (functions "nixosProfiles")
+        (functions "homeProfiles")
+        (functions "devshellProfiles")
 
         # suites aggregate profiles
-        (inputs.std.functions "nixosSuites")
-        (inputs.std.functions "homeSuites")
+        (functions "nixosSuites")
+        (functions "homeSuites")
 
         # configurations can be deployed
-        (inputs.std.data "colmenaConfigurations")
-        (inputs.std.data "homeConfigurations")
+        (data "colmenaConfigurations")
+        (data "homeConfigurations")
 
         # devshells can be entered
-        (inputs.std.devshells "devshells")
+        (devshells "devshells")
 
         # jobs can be run
-        (inputs.std.runnables "jobs")
+        (runnables "jobs")
 
         # library holds shared knowledge made code
-        (inputs.std.functions "library")
+        (functions "library")
       ];
     }
     # soil - the first (and only) layer implements adapters for tooling
