@@ -3,27 +3,23 @@
   cell,
 }: let
   l = nixpkgs.lib // builtins;
+
   inherit (inputs) nixpkgs std;
+  inherit (std.lib) dev;
+
   withCategory = category: attrset: attrset // {inherit category;};
 in
-  l.mapAttrs (_: std.lib.dev.mkShell) {
-    default = {
-      extraModulesPath,
-      pkgs,
-      ...
-    }: {
+  l.mapAttrs (_: dev.mkShell) {
+    default = {...}: {
       name = "Apis Mellifera";
-      std.docs.enable = false;
-      git.hooks = {
-        enable = true;
-        pre-commit.text = builtins.readFile ./pre-flight-check.sh;
-      };
-      imports = [
-        std.std.devshellProfiles.default
-        "${extraModulesPath}/git/hooks.nix"
+      nixago = with std.presets.nixago; [
+        treefmt
+        lefthook
+        editorconfig
+        (conform {configData = {inherit (inputs) cells;};})
       ];
+      imports = [];
       commands = [
-        (withCategory "hexagon" {package = nixpkgs.treefmt;})
         # (withCategory "hexagon" {package = nixpkgs.colmena;})
         (withCategory "hexagon" {
           name = "build-larva";
@@ -33,18 +29,5 @@ in
           '';
         })
       ];
-      packages = [
-        # formatters
-        nixpkgs.alejandra
-        nixpkgs.nodePackages.prettier
-        nixpkgs.nodePackages.prettier-plugin-toml
-        nixpkgs.shfmt
-        nixpkgs.editorconfig-checker
-      ];
-      devshell.startup.nodejs-setuphook =
-        l.stringsWithDeps.noDepEntry
-        ''
-          export NODE_PATH=${nixpkgs.nodePackages.prettier-plugin-toml}/lib/node_modules:$NODE_PATH
-        '';
     };
   }
