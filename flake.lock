@@ -164,22 +164,6 @@
         "type": "github"
       }
     },
-    "mdbook-kroki-preprocessor": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1661755005,
-        "narHash": "sha256-1TJuUzfyMycWlOQH67LR63/ll2GDZz25I3JfScy/Jnw=",
-        "owner": "JoelCourtney",
-        "repo": "mdbook-kroki-preprocessor",
-        "rev": "93adb5716d035829efed27f65f2f0833a7d3e76f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "JoelCourtney",
-        "repo": "mdbook-kroki-preprocessor",
-        "type": "github"
-      }
-    },
     "n2c": {
       "inputs": {
         "flake-utils": [
@@ -260,28 +244,13 @@
         "type": "github"
       }
     },
-    "nixlib": {
-      "locked": {
-        "lastModified": 1636849918,
-        "narHash": "sha256-nzUK6dPcTmNVrgTAC1EOybSMsrcx+QrVPyqRdyKLkjA=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "28a5b0557f14124608db68d3ee1f77e9329e9dd5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
     "nixos-21-11": {
       "locked": {
-        "lastModified": 1648608655,
-        "narHash": "sha256-pTjZg9DwU89ZZ1fdtt6/i1X4vSNXoRJYUArgVZPh9F8=",
+        "lastModified": 1659446231,
+        "narHash": "sha256-hekabNdTdgR/iLsgce5TGWmfIDZ86qjPhxDg/8TlzhE=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ba93b1d8253ed4b359b9e81d10e02c106d3f8b11",
+        "rev": "eabc38219184cc3e04a974fe31857d8e0eac098d",
         "type": "github"
       },
       "original": {
@@ -293,11 +262,11 @@
     },
     "nixos-22-05": {
       "locked": {
-        "lastModified": 1666456812,
-        "narHash": "sha256-FPIuwJXMlxKjW0EJePUSRABCiInAw4Z9K7xzvKdaIn4=",
+        "lastModified": 1666488099,
+        "narHash": "sha256-DANs2epN5QgvxWzH7xF3dzb4WE0lEuMLrMEu/vPmQxw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "257cd998f59835c276b7c7d85ec4d34891dd7d9e",
+        "rev": "f9115594149ebcb409a42e303bec4956814a8419",
         "type": "github"
       },
       "original": {
@@ -309,15 +278,20 @@
     },
     "nixos-generators": {
       "inputs": {
-        "nixlib": "nixlib",
-        "nixpkgs": "nixpkgs_3"
+        "nixlib": [
+          "nixpkgs"
+        ],
+        "nixpkgs": [
+          "std",
+          "blank"
+        ]
       },
       "locked": {
-        "lastModified": 1647521142,
-        "narHash": "sha256-ZwK8n5yCYHjmSLPqwXiebUyQxSHQ3HyKAxs4psksuVc=",
+        "lastModified": 1666016402,
+        "narHash": "sha256-Cm/nrdUMXwXiFQforG1Mv8OA4o8yhuVx6E1eDFH4rew=",
         "owner": "nix-community",
         "repo": "nixos-generators",
-        "rev": "9f56b704ff3073436c3b93d63669ee773c592aa3",
+        "rev": "688db42a1eb34853f050267ff65c975f664312f0",
         "type": "github"
       },
       "original": {
@@ -328,11 +302,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1627969475,
-        "narHash": "sha256-MhVtkVt1MFfaDY3ObJu54NBcsaPk19vOBZ8ouhjO4qs=",
+        "lastModified": 1658644204,
+        "narHash": "sha256-MWyfCH9K3eVTXJUxBi67OQSAh9jJAnvWklM6qm4j8w8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "bd27e2e8316ac6eab11aa35c586e743286f23ecf",
+        "rev": "2f0c3be57c348f4cfd8820f2d189e29a685d9c41",
         "type": "github"
       },
       "original": {
@@ -355,22 +329,6 @@
       }
     },
     "nixpkgs_3": {
-      "locked": {
-        "lastModified": 1637186689,
-        "narHash": "sha256-NU7BhgnwA/3ibmCeSzFK6xGi+Bari9mPfn+4cBmyEjw=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "7fad01d9d5a3f82081c00fb57918d64145dc904c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_4": {
       "locked": {
         "lastModified": 1666424192,
         "narHash": "sha256-rb/a7Kg9s31jqkvdOQHFrUc5ig5kB+O2ZKB8mjU2kW8=",
@@ -400,7 +358,7 @@
         "nixos-21-11": "nixos-21-11",
         "nixos-22-05": "nixos-22-05",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_3",
         "std": "std"
       }
     },
@@ -414,7 +372,10 @@
           "std",
           "blank"
         ],
-        "mdbook-kroki-preprocessor": "mdbook-kroki-preprocessor",
+        "mdbook-kroki-preprocessor": [
+          "std",
+          "blank"
+        ],
         "microvm": [
           "std",
           "blank"

@@ -2,11 +2,14 @@
   description = "The Hive - The secretly open NixOS-Society";
   inputs.std.url = "github:divnix/std";
   inputs.std.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.std.inputs.mdbook-kroki-preprocessor.follows = "std/blank";
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
   # tools
   inputs = {
     nixos-generators.url = "github:nix-community/nixos-generators";
+    nixos-generators.inputs.nixpkgs.follows = "std/blank";
+    nixos-generators.inputs.nixlib.follows = "nixpkgs";
     colmena.url = "github:blaggacao/colmena";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
     colmena.inputs.stable.follows = "std/blank";
