@@ -7,6 +7,10 @@
   # tools
   inputs = {
     nixos-generators.url = "github:nix-community/nixos-generators";
+    colmena.url = "github:blaggacao/colmena";
+    colmena.inputs.nixpkgs.follows = "nixpkgs";
+    colmena.inputs.stable.follows = "std/blank";
+    colmena.inputs.flake-utils.follows = "std/flake-utils";
   };
 
   # nixpkgs & home-manager
@@ -68,41 +72,13 @@
     # soil - the first (and only) layer implements adapters for tooling
     {
       # tool: colmena
-      colmena = let
-        inherit (inputs.nixpkgs.lib.attrsets) foldAttrs recursiveUpdate mapAttrsToList mapAttrs';
-        inherit (inputs.nixpkgs.lib.lists) optionals flatten map;
-        inherit (builtins) attrValues;
-        collect = x:
-          foldAttrs recursiveUpdate {} (flatten (mapAttrsToList (
-              cell: organelles:
-                optionals (organelles ? colmenaConfigurations)
-                (map (mapAttrs' (name: value: {
-                  name =
-                    if name != "meta"
-                    then "${cell}-o-${name}"
-                    else name;
-                  value =
-                    if name == "meta" && (value ? nodeNixpkgs)
-                    then
-                      (
-                        value
-                        // {
-                          nodeNixpkgs =
-                            mapAttrs' (
-                              name: value: {
-                                name = "${cell}-o-${name}";
-                                inherit value;
-                              }
-                            )
-                            value.nodeNixpkgs;
-                        }
-                      )
-                    else value;
-                })) (attrValues organelles.colmenaConfigurations))
-            )
-            x));
+      colmenaHive = let
+        makeHoneyFrom = import ./make-honey.nix {
+          inherit (inputs) colmena nixpkgs;
+          cellBlock = "colmenaConfigurations";
+        };
       in
-        collect exports;
+        makeHoneyFrom self;
     };
 
   # --- Flake Local Nix Configuration ----------------------------

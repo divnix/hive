@@ -20,7 +20,7 @@ in
       ];
       imports = [];
       commands = [
-        # (withCategory "hexagon" {package = nixpkgs.colmena;})
+        (withCategory "hexagon" {package = inputs.colmena.packages.colmena;})
         (withCategory "hexagon" {
           name = "build-larva";
           help = "the hive x86_64-linux iso-bootstrapper";

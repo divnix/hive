@@ -1,12 +1,10 @@
 {
   inputs,
   cell,
-}: let
-  inherit (inputs) nixos;
-  inherit (inputs.cells) _QUEEN;
-in
-  builtins.mapAttrs (_QUEEN.library.lay nixos.legacyPackages.x86_64-linux) {
-    blacklion = {
-      imports = [./nixosConfigurations/blacklion];
-    };
-  }
+}: {
+  # blacklion = {
+  #   system = "x86_64-linux";
+  #   packages = inputs.nixos.legacyPackages;
+  #   imports = [./nixosConfigurations/blacklion];
+  # };
+}
