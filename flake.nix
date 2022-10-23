@@ -7,8 +7,8 @@
 
   # tools
   inputs = {
-    nixos-generators.url = "github:nix-community/nixos-generators";
-    nixos-generators.inputs.nixpkgs.follows = "std/blank";
+    nixos-generators.url = "github:blaggacao/nixos-generators";
+    nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     nixos-generators.inputs.nixlib.follows = "nixpkgs";
     colmena.url = "github:blaggacao/colmena";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
@@ -52,6 +52,7 @@
         (functions "homeSuites")
 
         # configurations can be deployed
+        (data "nixosConfigurations")
         (data "colmenaConfigurations")
         (data "homeConfigurations")
 
@@ -67,7 +68,7 @@
     }
     # soil
     {
-      # tool: colmena -- "fill the jar on the soil with honey!"
+      # tool: colmena -- "fill the jar on the soil with the honey!"
       colmenaHive = let
         makeHoneyFrom = import ./make-honey.nix {
           inherit (inputs) colmena nixpkgs;
@@ -75,6 +76,15 @@
         };
       in
         makeHoneyFrom self;
+
+      # tool: nixos-generators -- "get drunk like a bear!"
+      nixosConfigurations = let
+        makeMeadFrom = import ./make-mead.nix {
+          inherit (inputs) nixpkgs;
+          cellBlock = "nixosConfigurations";
+        };
+      in
+        makeMeadFrom self;
     };
 
   # --- Flake Local Nix Configuration ----------------------------

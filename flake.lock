@@ -282,20 +282,19 @@
           "nixpkgs"
         ],
         "nixpkgs": [
-          "std",
-          "blank"
+          "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1666016402,
-        "narHash": "sha256-Cm/nrdUMXwXiFQforG1Mv8OA4o8yhuVx6E1eDFH4rew=",
-        "owner": "nix-community",
+        "lastModified": 1666559224,
+        "narHash": "sha256-wi1b6PZ4QhLcrpZTXb+hqWdyQTcPz9UMvHdKB+W1Ys0=",
+        "owner": "blaggacao",
         "repo": "nixos-generators",
-        "rev": "688db42a1eb34853f050267ff65c975f664312f0",
+        "rev": "20c21b9880628f61ce1d2e95ca393691d40ced2e",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
+        "owner": "blaggacao",
         "repo": "nixos-generators",
         "type": "github"
       }

@@ -2,9 +2,18 @@
   inputs,
   cell,
 }: let
-  inherit (inputs) nixpkgs;
+  inherit (inputs) nixpkgs nixos-generators;
+  l = nixpkgs.lib // builtins;
 in {
-  bootstrap = {config, ...}: {
+  bootstrap = {
+    config,
+    options,
+    ...
+  }: {
+    imports = [
+      nixos-generators.nixosModules.install-iso
+    ];
+
     nix = {
       package = nixpkgs.nix;
       extraOptions = ''
@@ -13,13 +22,17 @@ in {
     };
 
     networking.domain = "local";
-    isoImage.isoBaseName = "bootstrap-hive-from-queen";
-    isoImage.contents = [
-      {
-        source = inputs.self;
-        target = "/hive/";
-      }
-    ];
+
+    isoImage = {
+      isoBaseName = "bootstrap-hive-from-queen";
+      contents = [
+        {
+          source = inputs.self;
+          target = "/hive/";
+        }
+      ];
+    };
+
     systemd.network = {
       # https://www.freedesktop.org/software/systemd/man/systemd.network.html
       networks."boostrap-link-local" = {
