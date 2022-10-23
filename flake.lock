@@ -32,15 +32,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1666492488,
+        "lastModified": 1666555794,
         "narHash": "sha256-MfGeJoRypj7RzvfsTohCJHEHGw+//EVCP08BU3HfvCM=",
-        "owner": "blaggacao",
+        "owner": "zhaofengli",
         "repo": "colmena",
-        "rev": "4f72dd15fdd2e1257dedbbc47965e114e6ae3034",
+        "rev": "2bd563e847817a3e96b2aa9932109c83bc64e566",
         "type": "github"
       },
       "original": {
-        "owner": "blaggacao",
+        "owner": "zhaofengli",
         "repo": "colmena",
         "type": "github"
       }

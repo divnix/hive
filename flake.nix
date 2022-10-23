@@ -10,7 +10,7 @@
     nixos-generators.url = "github:blaggacao/nixos-generators";
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
     nixos-generators.inputs.nixlib.follows = "nixpkgs";
-    colmena.url = "github:blaggacao/colmena";
+    colmena.url = "github:zhaofengli/colmena";
     colmena.inputs.nixpkgs.follows = "nixpkgs";
     colmena.inputs.stable.follows = "std/blank";
     colmena.inputs.flake-utils.follows = "std/flake-utils";
