@@ -27,18 +27,11 @@
     home-21-11.url = "github:blaggacao/home-manager/release-21.11-with-nix-profile";
   };
 
-  # individual extra inputs
-  inputs = {
-  };
-
   outputs = {
     std,
     self,
     ...
-  } @ inputs: let
-    # exports have no system, pick one
-    exports = self.x86_64-linux;
-  in
+  } @ inputs:
     std.growOn {
       inherit inputs;
       cellsFrom = ./comb;
@@ -72,9 +65,9 @@
         (functions "library")
       ];
     }
-    # soil - the first (and only) layer implements adapters for tooling
+    # soil
     {
-      # tool: colmena
+      # tool: colmena -- "fill the jar on the soil with honey!"
       colmenaHive = let
         makeHoneyFrom = import ./make-honey.nix {
           inherit (inputs) colmena nixpkgs;
