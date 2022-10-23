@@ -6,8 +6,8 @@
   inherit (cell) nixosProfiles;
 in {
   larva = {
-    system = "x86_64-linux";
-    packages = inputs.nixos.legacyPackages;
+    bee.system = "x86_64-linux";
+    bee.pkgs = inputs.nixos.legacyPackages;
     deployment = {
       targetHost = "fe80::47";
       targetPort = 22;

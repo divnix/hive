@@ -3,8 +3,8 @@
   cell,
 }: {
   # blacklion = {
-  #   system = "x86_64-linux";
-  #   packages = inputs.nixos.legacyPackages;
+  #   bee.system = "x86_64-linux";
+  #   bee.pkgs = inputs.nixos.legacyPackages;
   #   imports = [./nixosConfigurations/blacklion];
   # };
 }

@@ -24,7 +24,7 @@
       opt = l.getAttrFromPath optionName options;
     in {
       options = l.setAttrByPath optionName (l.mkOption {visible = false;});
-      config.erased = [
+      config._hive_erased = [
         {
           assertion = !opt.isDefined;
           message = ''
@@ -32,8 +32,8 @@
 
             This is a Standard simplification.
 
-              - Please set 'config.packages' to an instantiated version of nixpkgs.
-              - Also declare the host system via 'config.system'.
+              - Please set 'config.bee.pkgs' to an instantiated version of nixpkgs.
+              - Also declare the host system via 'config.bee.system'.
           '';
         }
       ];
@@ -55,23 +55,25 @@
         };
       };
       options = {
-        erased = l.mkOption {
+        _hive_erased = l.mkOption {
           type = l.types.listOf l.types.unspecified;
           internal = true;
           default = [];
         };
-        system = l.mkOption {
-          type = l.types.str;
-          description = "divnix/hive requires you to set the host's system via 'config.system = \"x86_64-linux\";'";
-        };
-        packages = l.mkOption {
-          type = l.mkOptionType {
-            name = "packages";
-            description = "instance of nixpkgs";
-            check = x: (l.isAttrs x) && (l.hasAttr "path" x);
+        bee = {
+          system = l.mkOption {
+            type = l.types.str;
+            description = "divnix/hive requires you to set the host's system via 'config.bee.system = \"x86_64-linux\";'";
           };
-          description = "divnix/hive requires you to set the nixpkgs instance via 'config.packages = inputs.nixos-22.05.legacyPackages;'";
-          apply = x: x.${config.system};
+          pkgs = l.mkOption {
+            type = l.mkOptionType {
+              name = "packages";
+              description = "instance of nixpkgs";
+              check = x: (l.isAttrs x) && (l.hasAttr "path" x);
+            };
+            description = "divnix/hive requires you to set the nixpkgs instance via 'config.bee.pkgs = inputs.nixos-22.05.legacyPackages;'";
+            apply = x: x.${config.bee.system};
+          };
         };
       };
     };
@@ -79,26 +81,21 @@
   checkAndTransformConfig = user: machine: config: let
     _file = "github:divnix/hive: ./comb/${user}; target: ${machine}";
     locatedConfig = {
-      imports = [
-        # FIXME: don't remove 'imports'
-        # but for some unknown reason, we get an infinit recursion, otherwise
-        (l.removeAttrs config ["imports"])
-      ];
+      imports = [config];
       inherit _file;
     };
     checked = (evalModulesMinimal {modules = [combCheckModule locatedConfig];}).config;
     asserted = let
-      failedAsserts = map (x: x.message) (l.filter (x: !x.assertion) checked.erased);
+      failedAsserts = map (x: x.message) (l.filter (x: !x.assertion) checked._hive_erased);
     in
       if failedAsserts != []
       then throw "\nFailed assertions:\n${l.concatStringsSep "\n" (map (x: "- ${x}") failedAsserts)}"
       else checked;
   in
-    (l.removeAttrs config ["system" "packages" "erased"])
+    (l.removeAttrs config ["_hive_erased" "bee"])
     // {
       inherit _file;
-      nixpkgs.pkgs = asserted.packages;
-      nixpkgs.system = asserted.system;
+      nixpkgs = {inherit (asserted.bee) system pkgs;};
     };
 in
   self: let
