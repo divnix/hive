@@ -64,7 +64,10 @@
               check = x: (l.isAttrs x) && (l.hasAttr "path" x);
             };
             description = "divnix/hive requires you to set the nixpkgs instance via 'config.bee.pkgs = inputs.nixos-22.05.legacyPackages;'";
-            apply = x: x.${config.bee.system};
+            apply = x:
+              if (l.hasAttr "${config.bee.system}" x)
+              then x.${config.bee.system}
+              else x;
           };
         };
       };
