@@ -68,25 +68,15 @@
     }
     # soil
     {
+      lib = (inputs.std.harvest inputs.self ["_QUEEN" "lib"]).x86_64-linux;
+    }
+    # soil
+    {
       # tool: colmena -- "fill the jar on the soil with the honey!"
-      colmenaHive = let
-        makeHoneyFrom = import ./make-honey.nix {
-          inherit (inputs) colmena nixpkgs;
-          cellBlock = "colmenaConfigurations";
-        };
-      in
-        makeHoneyFrom self;
-
+      colmenaHive = self.lib.colmenaHive "colmenaConfigurations" self;
       # tool: nixos-generators -- "get drunk like a bear!"
-      nixosConfigurations = let
-        makeMeadFrom = import ./make-mead.nix {
-          inherit (inputs) nixpkgs;
-          cellBlock = "nixosConfigurations";
-        };
-      in
-        makeMeadFrom self;
+      nixosConfigurations = self.lib.nixosConfigurations "nixosConfigurations" self;
     };
-
   # --- Flake Local Nix Configuration ----------------------------
   # TODO: adopt spongix
   nixConfig = {

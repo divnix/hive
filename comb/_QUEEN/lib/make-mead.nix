@@ -1,7 +1,8 @@
 {
-  nixpkgs,
+  inputs,
   cellBlock ? "nixosConfigurations",
 }: let
+  inherit (inputs) nixpkgs;
   l = nixpkgs.lib // builtins;
   inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir;
 in

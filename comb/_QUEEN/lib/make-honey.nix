@@ -1,8 +1,8 @@
 {
-  colmena,
-  nixpkgs,
+  inputs,
   cellBlock ? "colmenaConfigurations",
 }: let
+  inherit (inputs) colmena nixpkgs;
   l = nixpkgs.lib // builtins;
   inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir;
 
@@ -36,14 +36,14 @@ in
       evalSelectedDrvPaths = names: l.mapAttrs (_: v: v.drvPath) (this.evalSelected names);
       metaConfig = {
         name = "divnix/hive";
-        inherit (import ./flake.nix) description;
+        inherit (import "${inputs.std.incl inputs.self ["flake.nix"]}/flake.nix") description;
         machinesFile = null;
         allowApplyAll = false;
       };
       introspect = f:
         f {
           lib = nixpkgs.lib // builtins;
-          pkgs = nixpkgs.legacyPackages.${builtins.currentSystem};
+          pkgs = nixpkgs;
           nodes = l.mapAttrs (evalNode {_module.check = false;}) comb;
         };
     })

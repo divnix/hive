@@ -4,7 +4,7 @@
 }: let
   l = nixpkgs.lib // builtins;
   evalModulesMinimal =
-    (import (nixpkgs + /nixos/lib/default.nix) {
+    (import (nixpkgs.sourceInfo.outPath + "/nixos/lib/default.nix") {
       inherit (nixpkgs) lib;
       # don't show the warning.
       featureFlags.minimalModules = {};
