@@ -85,6 +85,15 @@
         };
       in
         makeMeadFrom self;
+
+      # tool: home-manager -- "drunken sailor, sunken sailor; honeymoon pantaloon."
+      homeConfigurations = let
+        makeMoonshineFrom = import ./make-moonshine.nix {
+          inherit (inputs) nixpkgs;
+          cellBlock = "homeConfigurations";
+        };
+      in
+        makeMoonshineFrom self;
     };
 
   # --- Flake Local Nix Configuration ----------------------------

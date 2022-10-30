@@ -17,6 +17,7 @@ in
       ];
       imports = [];
       commands = [
+        (withCategory "hexagon" {package = inputs.home.packages.home-manager;})
         (withCategory "hexagon" {package = inputs.colmena.packages.colmena;})
         (withCategory "hexagon" {package = inputs.nixos-generators.packages.nixos-generate;})
         (withCategory "hexagon" {
