@@ -1,7 +1,4 @@
-{
-  inputs,
-  cell,
-}: let
+let
   inherit (cell) nixosSuites;
 in {
   larva = {

@@ -1,7 +1,4 @@
-{
-  inputs,
-  cell,
-}: let
+let
   inherit (inputs) nixpkgs nixos-generators;
   l = nixpkgs.lib // builtins;
 in {
