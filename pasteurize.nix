@@ -96,10 +96,10 @@
   /*
 
   We start with:
-        ${system}.${user}.${cellBlock}.${machine} = config;
+  ${system}.${user}.${cellBlock}.${machine} = config;
 
-            We want:
-                  ${user}-o-${machine} = config; (filtered by system)
+  We want:
+  ${user}-o-${machine} = config; (filtered by system)
 
   */
   pasteurize = self:
