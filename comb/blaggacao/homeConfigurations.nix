@@ -1,5 +1,6 @@
 let
   inherit (cell) homeSuites;
+  inherit (inputs) nixgl nixos; # home
 
   name = "David Arnold";
   # email = "dgx.arnold@gmail.com";
@@ -40,7 +41,7 @@ in {
       []
       ++ gui
       ++ shell
-      ++ nix;
+      ++ system;
   };
   server = {
     inherit programs bee home manual;
@@ -48,6 +49,6 @@ in {
     imports = with homeSuites;
       []
       ++ shell
-      ++ nix;
+      ++ system;
   };
 }

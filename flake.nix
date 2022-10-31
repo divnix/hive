@@ -14,6 +14,9 @@
     colmena.inputs.nixpkgs.follows = "nixpkgs";
     colmena.inputs.stable.follows = "std/blank";
     colmena.inputs.flake-utils.follows = "std/flake-utils";
+    nixgl.url = "github:guibou/nixGL";
+    nixgl.inputs.nixpkgs.follows = "nixpkgs";
+    nixgl.inputs.flake-utils.follows = "std/flake-utils";
   };
 
   # nixpkgs & home-manager

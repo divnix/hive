@@ -12,7 +12,7 @@ in {
     homeProfiles.guiPackages
     homeProfiles.guiPrograms
   ];
-  nix = [
-    homeProfiles.nixProfile
+  system = [
+    homeProfiles.systemProfile
   ];
 }
