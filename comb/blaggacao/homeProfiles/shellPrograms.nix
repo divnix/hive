@@ -110,6 +110,20 @@
       "_" = "sudo ";
     };
     initExtra = ''
+      function j() {
+
+          if [ $# -eq 0 ]; then
+            _j_dir="$(fd --type d '\.git$' --hidden $HOME/src/ -d5 --prune | xargs dirname | fzf)"
+          else
+            _j_dir=$(command h "$HOME/src" "$@")
+          fi
+
+          _j_ret=$?
+
+          [ "$_j_dir" != "$PWD" ] && cd "$_j_dir"
+          return $_j_ret
+      }
+
       alias kak="~/src/github.com/mawww/kakoune/src/kak"
 
       export EDITOR=$(which kak)
