@@ -9,9 +9,7 @@ in
     comb = cure self;
     res = name: config: let
       inherit
-        (shake config {
-          home.username = name;
-        })
+        (shake config {})
         evaled
         ;
       asserted = showAssertions evaled;

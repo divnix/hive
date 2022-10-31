@@ -1,23 +1,18 @@
 let
   inherit (inputs.cells) blaggacao;
 
-  inherit (cell) homeProfiles;
+  inherit (cell) homeProfiles homeModules;
 in {
-  shell = with homeProfiles; [
-    blaggacao.homeModules.alacritty
-    alacritty
-    bat
-    broot
-    direnv
-    fzf
-    gh
-    git
-    gpg
-    jq
-    mcfly
-    packages
-    starship
-    zoxide
-    zsh
+  shell = [
+    homeModules.alacritty
+    homeProfiles.shellPackages
+    homeProfiles.shellPrograms
+  ];
+  gui = [
+    homeProfiles.guiPackages
+    homeProfiles.guiPrograms
+  ];
+  nix = [
+    homeProfiles.nixProfile
   ];
 }

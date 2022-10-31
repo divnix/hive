@@ -65,6 +65,9 @@
         # library holds shared knowledge made code
         (functions "library")
       ];
+      nixpkgsConfig = {
+        allowUnfree = true;
+      };
     }
     # soil
     {
