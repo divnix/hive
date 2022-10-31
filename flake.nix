@@ -22,7 +22,7 @@
     home.follows = "home-22-05";
 
     nixos-22-05.url = "github:nixos/nixpkgs/release-22.05";
-    home-22-05.url = "github:nix-community/home-manager/release-22.05";
+    home-22-05.url = "github:blaggacao/home-manager/release-22.05"; # some temp fixes
     nixos-21-11.url = "github:nixos/nixpkgs/release-21.11";
     home-21-11.url = "github:blaggacao/home-manager/release-21.11-with-nix-profile";
   };

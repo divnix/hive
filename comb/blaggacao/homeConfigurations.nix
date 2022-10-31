@@ -35,6 +35,7 @@ let
 in {
   workstation = {
     inherit programs bee home manual;
+    targets.genericLinux.enable = true;
     imports = with homeSuites;
       []
       ++ gui
@@ -43,6 +44,7 @@ in {
   };
   server = {
     inherit programs bee home manual;
+    targets.genericLinux.enable = true;
     imports = with homeSuites;
       []
       ++ shell

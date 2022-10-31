@@ -87,6 +87,7 @@
     enable = true;
     enableAutosuggestions = true;
     enableCompletion = true;
+    enableSyntaxHighlighting = true;
     autocd = true;
     history.share = true;
     dotDir = ".config/zsh";
@@ -109,11 +110,11 @@
       "_" = "sudo ";
     };
     initExtra = ''
-      export EDITOR=$(which vim)
+      alias kak="~/src/github.com/mawww/kakoune/src/kak"
+
+      export EDITOR=$(which kak)
       export GPG_TTY=$(tty)
 
-      # Remove when intregrations are set up
-      eval "$(thefuck --alias)"
 
       eval "$(h --setup ~/src)"
 

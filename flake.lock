@@ -150,15 +150,15 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1665996265,
-        "narHash": "sha256-/k9og6LDBQwT+f/tJ5ClcWiUl8kCX5m6ognhsAxOiCY=",
-        "owner": "nix-community",
+        "lastModified": 1667182798,
+        "narHash": "sha256-9kQpjZCQaMLiOyPqnj332Bml4XjFWCGFUqeLTVclMBI=",
+        "owner": "blaggacao",
         "repo": "home-manager",
-        "rev": "b81e128fc053ab3159d7b464d9b7dedc9d6a6891",
+        "rev": "20194a35604169703d5ef8ec7353c44b612cfb14",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
+        "owner": "blaggacao",
         "ref": "release-22.05",
         "repo": "home-manager",
         "type": "github"
