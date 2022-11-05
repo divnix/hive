@@ -25,7 +25,15 @@ in
           name = "build-larva";
           help = "the hive x86_64-linux iso-bootstrapper";
           command = ''
-            nix build $PRJ_ROOT#nixosConfigurations._QUEEN-o-larva.config.system.build.isoImage
+            echo "Boostrap image is building ..."
+            if path=$(nix build $PRJ_ROOT#nixosConfigurations._QUEEN-o-larva.config.system.build.isoImage --print-out-paths); then
+               echo "Boostrap image build finished."
+               echo "-------"
+               echo "You can now burn it to a USB with the following command:"
+               echo -e "writedisk ./result/iso/$(echo $path | cut --delimiter '-' --output-delimiter '-' -f 2-)"
+            else
+               echo "Boostrap image build failed."
+            fi
           '';
         })
       ];
