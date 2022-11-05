@@ -24,7 +24,7 @@ in
           name = "build-larva";
           help = "the hive x86_64-linux iso-bootstrapper";
           command = ''
-            nix build $PRJ_ROOT#x86_64-linux._QUEEN.nixosConfigurations.larva.config.system.build.isoImage
+            nix build $PRJ_ROOT#nixosConfigurations._QUEEN-o-larva.config.system.build.isoImage
           '';
         })
       ];
