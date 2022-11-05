@@ -70,6 +70,27 @@
         "type": "github"
       }
     },
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1667677272,
+        "narHash": "sha256-FWo+nXscVru0QYUmCW84WewA2t7CNzASB3b9R4t90e4=",
+        "owner": "blaggacao",
+        "repo": "disko",
+        "rev": "78e5692b9a76d93b8bddc5ef079f37728f8ec164",
+        "type": "github"
+      },
+      "original": {
+        "owner": "blaggacao",
+        "ref": "module",
+        "repo": "disko",
+        "type": "github"
+      }
+    },
     "dmerge": {
       "inputs": {
         "nixlib": [
@@ -370,6 +391,7 @@
     "root": {
       "inputs": {
         "colmena": "colmena",
+        "disko": "disko",
         "home": [
           "home-22-05"
         ],

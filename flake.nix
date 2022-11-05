@@ -17,6 +17,8 @@
     nixgl.url = "github:guibou/nixGL";
     nixgl.inputs.nixpkgs.follows = "nixpkgs";
     nixgl.inputs.flake-utils.follows = "std/flake-utils";
+    disko.url = "github:blaggacao/disko/module";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # nixpkgs & home-manager
@@ -46,6 +48,7 @@
         (functions "devshellModules")
 
         # profiles activate
+        (functions "hardwareProfiles")
         (functions "nixosProfiles")
         (functions "homeProfiles")
         (functions "devshellProfiles")
