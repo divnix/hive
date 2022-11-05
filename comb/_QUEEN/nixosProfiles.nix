@@ -5,6 +5,7 @@ in {
   bootstrap = {
     config,
     options,
+    pkgs,
     ...
   }: {
     imports = [
@@ -19,6 +20,33 @@ in {
     };
 
     networking.domain = "local";
+
+    # Provide networkmanager for easy wireless configuration.
+    networking.networkmanager.enable = true;
+    networking.wireless.enable = l.mkForce false;
+    services.getty.helpLine =
+      ''
+        The "nixos" and "root" accounts have empty passwords.
+
+        An ssh daemon is running. You then must set a password
+        for either "root" or "nixos" with `passwd` or add an ssh key
+        to /home/nixos/.ssh/authorized_keys be able to login.
+
+        If you need a wireless connection, type
+        ``sudo systemctl start NetworkManager` and configure a
+        network using `sudo ifwifi scan` & `sudo ifwifi connect`.
+        See the NixOS manual for details.
+      ''
+      + l.optionalString config.services.xserver.enable ''
+
+        Type `sudo systemctl start display-manager' to
+        start the graphical user interface.
+      '';
+    environment.systemPackages = [
+      (pkgs.callPackage ./nixosProfiles/ifwifi {
+        inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+      })
+    ];
 
     isoImage = {
       isoBaseName = "bootstrap-hive-from-queen";
