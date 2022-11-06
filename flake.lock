@@ -147,28 +147,9 @@
         "type": "github"
       }
     },
-    "home-21-11": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1638317954,
-        "narHash": "sha256-Y02WtZ1ulx4bUJfsZGZAfvYiLmjMsSyvoHv9hYFC9SQ=",
-        "owner": "blaggacao",
-        "repo": "home-manager",
-        "rev": "f073827fdfcd05bd4561cea3bb31a3e609215d44",
-        "type": "github"
-      },
-      "original": {
-        "owner": "blaggacao",
-        "ref": "release-21.11-with-nix-profile",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "home-22-05": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs"
       },
       "locked": {
         "lastModified": 1667182798,
@@ -289,22 +270,6 @@
         "type": "github"
       }
     },
-    "nixos-21-11": {
-      "locked": {
-        "lastModified": 1659446231,
-        "narHash": "sha256-hekabNdTdgR/iLsgce5TGWmfIDZ86qjPhxDg/8TlzhE=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "eabc38219184cc3e04a974fe31857d8e0eac098d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "release-21.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixos-22-05": {
       "locked": {
         "lastModified": 1666488099,
@@ -360,20 +325,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1658644204,
-        "narHash": "sha256-MWyfCH9K3eVTXJUxBi67OQSAh9jJAnvWklM6qm4j8w8=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "2f0c3be57c348f4cfd8820f2d189e29a685d9c41",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
         "lastModified": 1666424192,
         "narHash": "sha256-rb/a7Kg9s31jqkvdOQHFrUc5ig5kB+O2ZKB8mjU2kW8=",
         "owner": "nixos",
@@ -395,16 +346,14 @@
         "home": [
           "home-22-05"
         ],
-        "home-21-11": "home-21-11",
         "home-22-05": "home-22-05",
         "nixgl": "nixgl",
         "nixos": [
           "nixos-22-05"
         ],
-        "nixos-21-11": "nixos-21-11",
         "nixos-22-05": "nixos-22-05",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "std": "std"
       }
     },
