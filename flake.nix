@@ -74,6 +74,7 @@
       };
     }
     # soil
+    {packages.x86_64-linux = {inherit (inputs.disko.packages.x86_64-linux) disko;};}
     {
       # tool: colmena -- "fill the jar on the soil with the honey!"
       colmenaHive = let

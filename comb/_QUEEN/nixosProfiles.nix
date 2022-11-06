@@ -13,6 +13,11 @@ in {
     ];
 
     nix = {
+      # only part of ./modules/profiles/channels.nix since 22.11
+      registry.nixpkgs.flake.outPath = builtins.path {
+        name = "source";
+        path = pkgs.path;
+      };
       package = nixpkgs.nix;
       extraOptions = ''
         experimental-features = nix-command flakes recursive-nix

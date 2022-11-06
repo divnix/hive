@@ -77,11 +77,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1667677272,
-        "narHash": "sha256-FWo+nXscVru0QYUmCW84WewA2t7CNzASB3b9R4t90e4=",
+        "lastModified": 1667712650,
+        "narHash": "sha256-fvOhYk8ZcvMc7b4bzztqrdm7WfupX73tblmcb54yIB4=",
         "owner": "blaggacao",
         "repo": "disko",
-        "rev": "78e5692b9a76d93b8bddc5ef079f37728f8ec164",
+        "rev": "27e6902d2fe2c1a6ff431dc68b30422c9af61398",
         "type": "github"
       },
       "original": {
@@ -339,6 +339,21 @@
         "type": "github"
       }
     },
+    "nosys": {
+      "locked": {
+        "lastModified": 1667698628,
+        "narHash": "sha256-6Q/aeHNCXTsGGb0yoc6CEmyK+9aaMnZkmw2/6jCV39s=",
+        "owner": "divnix",
+        "repo": "nosys",
+        "rev": "cef00e1e6d372874c976cabcee52ab89a0ab1ced",
+        "type": "github"
+      },
+      "original": {
+        "owner": "divnix",
+        "repo": "nosys",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "colmena": "colmena",
@@ -384,14 +399,15 @@
         "nixpkgs": [
           "nixpkgs"
         ],
+        "nosys": "nosys",
         "yants": "yants"
       },
       "locked": {
-        "lastModified": 1667096308,
-        "narHash": "sha256-RNi27FFv072+uUZGjubanMns07v3EV8l3TyuiGiU0fQ=",
+        "lastModified": 1667706640,
+        "narHash": "sha256-AcTYlitotiOlu0ypjT4XCsTqake5zkGNLQXD8rx3E7s=",
         "owner": "divnix",
         "repo": "std",
-        "rev": "3ab5852e9e53e1c3720ad4ceb0883f510bda2c56",
+        "rev": "f2b74537c1fe555147b3ade70aa1f9bf945c4a00",
         "type": "github"
       },
       "original": {
