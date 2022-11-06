@@ -124,7 +124,12 @@
             (l.attrByPath [cellBlock] {})
             (l.mapAttrs (machine:
               checkAndTransformConfigFor user machine (
-                asserted: {nixpkgs = {inherit (asserted.bee) system pkgs;};}
+                asserted: {
+                  nixpkgs = {
+                    inherit (asserted.bee) system pkgs;
+                    inherit (asserted.bee.pkgs) config; # nixos modules don't load this
+                  };
+                }
               )))
             (l.filterAttrs (_: config: config.nixpkgs.system == system))
             (l.mapAttrs (machine: l.nameValuePair "${user}-o-${machine}"))
