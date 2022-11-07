@@ -19,6 +19,7 @@
     nixgl.inputs.flake-utils.follows = "std/flake-utils";
     disko.url = "github:blaggacao/disko/module";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+    nixos-hardware.url = "github:nixos/nixos-hardware";
   };
 
   # nixpkgs & home-manager
