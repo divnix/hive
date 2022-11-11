@@ -75,7 +75,10 @@
       };
     }
     # soil
-    {packages.x86_64-linux = {inherit (inputs.disko.packages.x86_64-linux) disko;};}
+    {
+      packages.x86_64-linux = {inherit (inputs.disko.packages.x86_64-linux) disko;};
+      devShells = std.harvest self ["_QUEEN" "devshells"];
+    }
     {
       # tool: colmena -- "fill the jar on the soil with the honey!"
       colmenaHive = let

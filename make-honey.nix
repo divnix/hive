@@ -4,13 +4,14 @@
   cellBlock ? "colmenaConfigurations",
 }: let
   l = nixpkgs.lib // builtins;
-  inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir;
+  inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir beeOptions;
 
   colmenaModules = [
     colmena.nixosModules.assertionModule
     colmena.nixosModules.keyChownModule
     colmena.nixosModules.keyServiceModule
     colmena.nixosModules.deploymentOptions
+    beeOptions # still present, but we dont care
   ];
 in
   self: let

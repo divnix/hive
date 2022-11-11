@@ -11,8 +11,8 @@
     })
     .evalModules;
 
-  beeOptions = config: {
-    bee = {
+  beeOptions = {config, ...}: {
+    options.bee = {
       system = l.mkOption {
         type = l.types.str;
         description = "divnix/hive requires you to set the host's system via 'config.bee.system = \"x86_64-linux\";'";
@@ -69,21 +69,15 @@
         (erase ["nixpkgs" "crossSystem"])
         (erase ["nixpkgs" "pkgs"])
       ];
-      config = {
-        _module = {
-          freeformType = l.types.unspecified;
-          check = true;
-        };
+      config._module = {
+        freeformType = l.types.unspecified;
+        check = true;
       };
-      options =
-        {
-          _hive_erased = l.mkOption {
-            type = l.types.listOf l.types.unspecified;
-            internal = true;
-            default = [];
-          };
-        }
-        // (beeOptions config);
+      options._hive_erased = l.mkOption {
+        type = l.types.listOf l.types.unspecified;
+        internal = true;
+        default = [];
+      };
     };
 
   checkAndTransformConfigFor = user: target: out: config: let
@@ -92,7 +86,7 @@
       imports = [config];
       inherit _file;
     };
-    checked = (evalModulesMinimal {modules = [combCheckModule locatedConfig];}).config;
+    checked = (evalModulesMinimal {modules = [combCheckModule beeOptions locatedConfig];}).config;
     asserted = let
       failedAsserts = map (x: x.message) (l.filter (x: !x.assertion) checked._hive_erased);
     in
@@ -190,13 +184,10 @@
       # to happen on the `std` layer
       useNixpkgsModule = false;
     };
-    evaled = let
-      # clean up again; was just used to communicate with this shake function
-      config' = l.removeAttrs config ["bee"];
-    in
+    evaled =
       # need to use the extended lib
       lib.evalModules {
-        modules = [config' extra] ++ hmModules;
+        modules = [config beeOptions extra] ++ hmModules;
         specialArgs = {
           modulesPath = l.toString (config.bee.home + /modules);
         };
@@ -225,4 +216,4 @@
           then evaled
           else throw "\nFailed assertions:\n${failedStr}"
       );
-in {inherit pasteurize stir cure shake showAssertions;}
+in {inherit pasteurize stir cure shake showAssertions beeOptions;}

@@ -3,7 +3,7 @@
   cellBlock ? "nixosConfigurations",
 }: let
   l = nixpkgs.lib // builtins;
-  inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir;
+  inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir beeOptions;
 in
   self: let
     comb = pasteurize self;
@@ -12,7 +12,7 @@ in
     in
       evalConfig {
         inherit system;
-        modules = [extra config];
+        modules = [extra beeOptions config];
       };
   in
     l.mapAttrs (evalNode {}) comb
