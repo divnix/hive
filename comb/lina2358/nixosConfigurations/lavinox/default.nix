@@ -91,6 +91,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    xclip
     tty-share
     alacritty
     element-desktop
@@ -204,6 +205,17 @@
       rebase.autosquash = true;
       rerere.enable = true;
     };
+  };
+  programs.ssh = {
+    extraConfig = ''
+      Host github.com
+        User git
+        Hostname github.com
+        IdentityFile ~/.ssh/lar
+      Host gitlab.com
+        PreferredAuthentications publickey
+        IdentityFile ~/.ssh/lar
+    '';
   };
   programs.chromium = {
     enable = true;
