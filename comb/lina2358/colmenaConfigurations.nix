@@ -1,13 +1,9 @@
 {
   lavinox = {
-    bee.system = "x86_64-linux";
-    bee.pkgs = import inputs.nixos {
-      inherit (inputs.nixpkgs) system;
-      config.allowUnfree = true;
-      overlays = [];
-    };
+    networking.hostName = "lavinox";
     deployment = {
-      targetHost = "192.168.0.64";
+      allowLocalDeployment = true;
+      targetHost = null;
     };
     imports = [cell.nixosConfigurations.lavinox];
   };

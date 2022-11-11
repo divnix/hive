@@ -6,15 +6,25 @@
   pkgs,
   ...
 }: {
-  swapDevices = [
-    {
-      device = "/.swapfile";
-      size = 8192; # ~8GB - will be autocreated
-    }
-  ];
+  # swapDevices = [
+  #   {
+  #     device = "/.swapfile";
+  #     size = 8192; # ~8GB - will be autocreated
+  #   }
+  # ];
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  nix.settings = {
+    auto-optimise-store = true;
+    allowed-users = ["@wheel"];
+    trusted-users = ["root" "@wheel"];
+    experimental-features = [
+      "flakes"
+      "nix-command"
+    ];
+    accept-flake-config = true;
+  };
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -69,10 +79,13 @@
   hardware.sane.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.lar = {
-    isNormalUser = true;
-    initialPassword = "password123";
-    extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
+  users = {
+    users.lar = {
+      shell = pkgs.zsh;
+      isNormalUser = true;
+      initialPassword = "password123";
+      extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
+    };
   };
 
   # List packages installed in system profile. To search, run:
@@ -83,11 +96,13 @@
     element-desktop
     firefox
     chromium
+    enpass
     # Office
     libreoffice
     onlyoffice-bin
     beancount
     fava
+    direnv
     # Git & Tools
     git
     gh
@@ -168,10 +183,15 @@
     autosuggestions.enable = true;
     autosuggestions.async = true;
     syntaxHighlighting.enable = true;
+    shellInit = ''
+      eval "$(direnv hook zsh)"
+    '';
   };
   programs.git = {
     enable = true;
     config = {
+      user.name = "Lina Avendaño";
+      user.email = "lina8823@gmail.com";
       init.defaultBranch = "main";
       core.autocrlf = "input";
       pull.rebase = true;
