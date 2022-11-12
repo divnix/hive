@@ -94,11 +94,7 @@
       then throw "\nFailed assertions:\n${l.concatStringsSep "\n" (map (x: "- ${x}") failedAsserts)}"
       else checked;
   in
-    (l.removeAttrs config ["_hive_erased" "bee"])
-    // {
-      inherit _file;
-    }
-    // (out asserted);
+    locatedConfig // (out asserted);
 
   /*
 
@@ -197,6 +193,24 @@
     # system = config.bee.system; # not actually used
   };
 
+  # same as pasteurize, but for disko where the system doesn't matter
+  sing = self:
+    l.pipe
+    (
+      l.mapAttrs (system:
+        l.mapAttrs (user: blocks: (
+          l.pipe blocks [
+            (l.attrByPath [cellBlock] {})
+            (l.filterAttrs (_: _: "x86_64-linux" == system)) # pick one
+            (l.mapAttrs (disko: l.nameValuePair "${user}-o-${disko}"))
+          ]
+        )))
+      (l.intersectAttrs (l.genAttrs l.systems.doubles.all (_: null)) self)
+    ) [
+      (l.collect (x: x ? name && x ? value))
+      l.listToAttrs
+    ];
+
   # Error reporting
   showAssertions = let
     collectFailed = cfg:
@@ -216,4 +230,4 @@
           then evaled
           else throw "\nFailed assertions:\n${failedStr}"
       );
-in {inherit pasteurize stir cure shake showAssertions beeOptions;}
+in {inherit pasteurize stir cure shake sing showAssertions beeOptions;}

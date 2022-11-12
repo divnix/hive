@@ -17,7 +17,7 @@
     nixgl.url = "github:guibou/nixGL";
     nixgl.inputs.nixpkgs.follows = "nixpkgs";
     nixgl.inputs.flake-utils.follows = "std/flake-utils";
-    disko.url = "github:blaggacao/disko/module";
+    disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     nixos-hardware.url = "github:nixos/nixos-hardware";
   };
@@ -60,6 +60,7 @@
         (data "nixosConfigurations")
         (data "colmenaConfigurations")
         (data "homeConfigurations")
+        (data "diskoConfigurations")
 
         # devshells can be entered
         (devshells "devshells")
@@ -106,6 +107,15 @@
         };
       in
         makeMoonshineFrom self;
+
+      # tool: disko -- "Tiganizatia, tiganizatia - disko, disko partizani."
+      diskoConfigurations = let
+        makeShantyFrom = import ./make-shanty.nix {
+          inherit (inputs) nixpkgs;
+          cellBlock = "diskoConfigurations";
+        };
+      in
+        makeShantyFrom self;
     };
 
   # --- Flake Local Nix Configuration ----------------------------
