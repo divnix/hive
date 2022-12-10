@@ -93,8 +93,24 @@
       if failedAsserts != []
       then throw "\nFailed assertions:\n${l.concatStringsSep "\n" (map (x: "- ${x}") failedAsserts)}"
       else checked;
+
+    recursiveMerge = with l;
+      attrList: let
+        f = attrPath:
+          zipAttrsWith (
+            n: values:
+              if tail values == []
+              then head values
+              else if all isList values
+              then unique (concatLists values)
+              else if all isAttrs values
+              then f [n] values
+              else last values
+          );
+      in
+        f [] attrList;
   in
-    locatedConfig // (out asserted);
+    recursiveMerge [locatedConfig (out asserted)];
 
   /*
 
@@ -124,6 +140,16 @@
                     inherit (asserted.bee) system pkgs;
                     inherit (asserted.bee.pkgs) config; # nixos modules don't load this
                   };
+                  # seemlessly integrate hm if desired
+                  imports =
+                    []
+                    ++ l.optionals (asserted.bee ? home) [
+                      asserted.bee.home.nixosModules.home-manager
+                      {
+                        home-manager.useGlobalPkgs = true;
+                        home-manager.useUserPackages = true;
+                      }
+                    ];
                 }
               )))
             (l.filterAttrs (_: config: config.nixpkgs.system == system))
