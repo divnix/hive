@@ -60,6 +60,14 @@
           };
           description = "divnix/hive requires you to set the home-manager input via 'config.bee.home = inputs.home-22-05;'";
         };
+        darwin = l.mkOption {
+          type = l.mkOptionType {
+            name = "input";
+            description = "darwin input";
+            check = x: (l.isAttrs x) && (l.hasAttr "sourceInfo" x);
+          };
+          description = "divnix/hive requires you to set the darwin input via 'config.bee.darwin = inputs.darwin;'";
+        };
         pkgs = l.mkOption {
           type = l.mkOptionType {
             name = "packages";
@@ -130,6 +138,39 @@
     imports = [beeModule locatedConfig extraConfig] ++ nixosModules;
   };
 
+  tranformToDarwinConfig = evaled: locatedConfig: let
+    darwinModules =
+      import (evaled.config.bee.darwin + "/modules/module-list.nix")
+      ++ [
+        evaled.options.bee.darwin.darwinModules.flakeOverrides
+      ];
+    extraConfig = {
+      # seemlessly integrate hm if desired
+      imports = l.optionals evaled.options.bee.home.isDefined [
+        evaled.config.bee.home.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+        }
+      ];
+    };
+    eval = extra:
+      evaled.config.bee.darwin.lib.darwinSystem {
+        inherit (evaled.config.bee) system pkgs;
+        modules = [beeModule locatedConfig extraConfig extra];
+      };
+    bee =
+      evaled.config.bee
+      // {
+        _evaled = eval {config._module.check = true;};
+        _unchecked = eval {config._module.check = false;};
+      };
+  in {
+    inherit bee;
+    # complete module set, can be lib.evalModuled as-is
+    imports = [beeModule locatedConfig extraConfig] ++ darwinModules;
+  };
+
   tranformToHomeManagerConfig = evaled: locatedConfig: let
     lib = import (evaled.config.bee.home + /modules/lib/stdlib-extended.nix) l;
     hmModules = import (evaled.config.bee.home + /modules/modules.nix) {
@@ -163,6 +204,7 @@ in {
     beeModule
     checkBeeAnd
     tranformToNixosConfig
+    tranformToDarwinConfig
     tranformToHomeManagerConfig
     ;
 }

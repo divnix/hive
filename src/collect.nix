@@ -7,6 +7,7 @@
     /*
     Modules declare an interface into a problem domain
     */
+    darwinModules = throw "not implemented yet";
     nixosModules = throw "not implemented yet";
     homeModules = throw "not implemented yet";
     shellModules = throw "not implemented yet";
@@ -14,18 +15,24 @@
     Profiles define values on that interface
     */
     hardwareProfiles = throw "not implemented yet";
+    darwinProfiles = throw "not implemented yet";
     nixosProfiles = throw "not implemented yet";
     homeProfiles = throw "not implemented yet";
     shellProfiles = throw "not implemented yet";
     /*
     Suites aggregate profiles into groups
     */
+    darwinSuites = throw "not implemented yet";
     nixosSuites = throw "not implemented yet";
     homeSuites = throw "not implemented yet";
     shellSuites = throw "not implemented yet";
     /*
     Configurations have an init-sequence and can be deployed
     */
+    darwinConfigurations = import ./collect-darwin.nix {
+      cellBlock = "darwinConfigurations";
+      inherit nixpkgs inputs;
+    };
     nixosConfigurations = import ./collect-nixos.nix {
       cellBlock = "nixosConfigurations";
       inherit nixpkgs inputs;
