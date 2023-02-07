@@ -20,6 +20,8 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # nixpkgs & home-manager
@@ -38,7 +40,7 @@
   } @ inputs:
     std.growOn {
       inherit inputs;
-      cellsFrom = ./comb;
+      cellsFrom = ./cells;
       # debug = ["cells" "x86_64-linux"];
       cellBlocks = with std.blockTypes; [
         # modules implement
@@ -78,7 +80,7 @@
     # soil
     {
       packages.x86_64-linux = {inherit (inputs.disko.packages.x86_64-linux) disko;};
-      devShells = std.harvest self ["_QUEEN" "devshells"];
+      devShells = std.harvest self ["adtoraslonic" "devshells"];
     }
     {
       # tool: colmena -- "fill the jar on the soil with the honey!"
