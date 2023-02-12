@@ -1,12 +1,15 @@
 {
-  colmena,
+  inputs,
   nixpkgs,
-  cellBlock ? "colmenaConfigurations",
+  cellBlock,
 }: let
   l = nixpkgs.lib // builtins;
+  inherit (inputs) colmena;
   inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir beeOptions;
 
   colmenaModules = [
+    # these modules are tied to the below schemaversion
+    # so we fix them here
     colmena.nixosModules.assertionModule
     colmena.nixosModules.keyChownModule
     colmena.nixosModules.keyServiceModule

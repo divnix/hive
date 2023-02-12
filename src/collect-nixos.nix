@@ -1,6 +1,7 @@
 {
+  inputs, # unused for now
   nixpkgs,
-  cellBlock ? "nixosConfigurations",
+  cellBlock,
 }: let
   l = nixpkgs.lib // builtins;
   inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir beeOptions;

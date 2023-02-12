@@ -1,3 +1,0 @@
-{
-  alacritty = import ./programs/alacritty;
-}
