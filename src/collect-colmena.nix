@@ -40,7 +40,7 @@ in
       evalSelectedDrvPaths = names: l.mapAttrs (_: v: v.drvPath) (this.evalSelected names);
       metaConfig = {
         name = "divnix/hive";
-        inherit (import ./flake.nix) description;
+        inherit (import (inputs.self + /flake.nix)) description;
         machinesFile = null;
         allowApplyAll = false;
       };
