@@ -86,9 +86,9 @@
       imports = [config];
       inherit _file;
     };
-    checked = (evalModulesMinimal {modules = [combCheckModule beeOptions locatedConfig];}).config;
+    checked = evalModulesMinimal {modules = [combCheckModule beeOptions locatedConfig];};
     asserted = let
-      failedAsserts = map (x: x.message) (l.filter (x: !x.assertion) checked._hive_erased);
+      failedAsserts = map (x: x.message) (l.filter (x: !x.assertion) checked.config._hive_erased);
     in
       if failedAsserts != []
       then throw "\nFailed assertions:\n${l.concatStringsSep "\n" (map (x: "- ${x}") failedAsserts)}"
@@ -137,14 +137,14 @@
                     '''
                   '';
                   nixpkgs = {
-                    inherit (asserted.bee) system pkgs;
-                    inherit (asserted.bee.pkgs) config; # nixos modules don't load this
+                    inherit (asserted.config.bee) system pkgs;
+                    inherit (asserted.config.bee.pkgs) config; # nixos modules don't load this
                   };
                   # seemlessly integrate hm if desired
                   imports =
                     []
-                    ++ l.optionals (asserted.bee ? home) [
-                      asserted.bee.home.nixosModules.home-manager
+                    ++ l.optionals asserted.options.bee.home.isDefined [
+                      asserted.config.bee.home.nixosModules.home-manager
                       {
                         home-manager.useGlobalPkgs = true;
                         home-manager.useUserPackages = true;
@@ -182,7 +182,7 @@
                 # does a re-import (and we don't tolerate that interface)
                 # so we re-use bee to communicate with the shake function
                 # below
-                asserted: {bee = {inherit (asserted.bee) system pkgs home;};}
+                asserted: {bee = {inherit (asserted.config.bee) system pkgs home;};}
               )))
             (l.filterAttrs (_: config: config.bee.system == system))
             (l.mapAttrs (homecfg: l.nameValuePair "${user}-o-${homecfg}"))
