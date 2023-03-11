@@ -3,13 +3,7 @@
   cellBlock,
 }: let
   l = nixpkgs.lib // builtins;
-  evalModulesMinimal =
-    (import (nixpkgs + /nixos/lib/default.nix) {
-      inherit (nixpkgs) lib;
-      # don't show the warning.
-      featureFlags.minimalModules = {};
-    })
-    .evalModules;
+  evalModulesMinimal = nixpkgs.lib.nixos.evalModules;
 
   beeOptions = {config, ...}: {
     options.bee = {
