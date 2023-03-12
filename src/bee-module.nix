@@ -13,7 +13,11 @@
           message = ''
             The option `${l.showOption optionName}' is not supported.
               Location: ${l.showFiles opt.files}
-              ${if instruction != null then instruction else ""}
+              ${
+              if instruction != null
+              then instruction
+              else ""
+            }
           '';
         }
       ];
@@ -114,16 +118,17 @@
         system = null;
         modules = [beeModule locatedConfig extraConfig extra];
       };
-    bee = evaled.config.bee // {
-      _evaled = eval {config._module.check = true;};
-      _unchecked = eval {config._module.check = false;};
-    };
-  in
-    {
-      inherit bee;
-      # complete module set, can be lib.evalModuled as-is
-      imports = [beeModule locatedConfig extraConfig] ++ nixosModules;
-    };
+    bee =
+      evaled.config.bee
+      // {
+        _evaled = eval {config._module.check = true;};
+        _unchecked = eval {config._module.check = false;};
+      };
+  in {
+    inherit bee;
+    # complete module set, can be lib.evalModuled as-is
+    imports = [beeModule locatedConfig extraConfig] ++ nixosModules;
+  };
 
   tranformToHomeManagerConfig = evaled: locatedConfig: let
     lib = import (evaled.config.bee.home + /modules/lib/stdlib-extended.nix) l;
@@ -142,16 +147,17 @@
         };
         modules = [beeModule locatedConfig extra] ++ hmModules;
       };
-    bee = evaled.config.bee // {
-      _evaled = eval {config._module.check = true;};
-      _unchecked = eval {config._module.check = false;};
-    };
-  in
-    {
-      inherit bee;
-      # complete module set, can be lib.evalModuled as-is
-      imports = [beeModule locatedConfig] ++ hmModules;
-    };
+    bee =
+      evaled.config.bee
+      // {
+        _evaled = eval {config._module.check = true;};
+        _unchecked = eval {config._module.check = false;};
+      };
+  in {
+    inherit bee;
+    # complete module set, can be lib.evalModuled as-is
+    imports = [beeModule locatedConfig] ++ hmModules;
+  };
 in {
   inherit
     beeModule

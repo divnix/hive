@@ -2,7 +2,7 @@
   inputs,
   nixpkgs,
   cellBlock,
-}: let
+}: renamer: let
   l = nixpkgs.lib // builtins;
   inherit (inputs) colmena;
   inherit (import ./walk.nix {inherit nixpkgs cellBlock;}) walkPaisano;
@@ -27,12 +27,11 @@
   tranformToNixosConfig' = name: evaled: locatedConfig: let
     config = {
       imports = [locatedConfig] ++ colmenaModules;
-      _module.args = { inherit name; };
+      _module.args = {inherit name;};
     };
   in
     tranformToNixosConfig evaled config;
 
-  renamer = cell: target: "${cell}-${target}";
   walk = self:
     walkPaisano self (system: cell: [
       (l.mapAttrs (target: config: {

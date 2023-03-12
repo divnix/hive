@@ -44,10 +44,11 @@
       inherit nixpkgs inputs;
     };
   };
-in
-  Self: CellBlock:
+in {
+  renamer = cell: target: "${cell}-${target}";
+  __functor = self: Self: CellBlock:
     if builtins.hasAttr CellBlock dispatch
-    then dispatch.${CellBlock} Self
+    then dispatch.${CellBlock} self.renamer Self
     else
       builtins.throw ''
 
@@ -55,4 +56,5 @@ in
 
         It can collect the following cell blocks:
          - ${builtins.concatStringsSep "\n - " (builtins.attrNames dispatch)}
-      ''
+      '';
+}

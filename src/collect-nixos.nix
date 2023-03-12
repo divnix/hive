@@ -2,12 +2,11 @@
   inputs, # unused for now
   nixpkgs,
   cellBlock,
-}: let
+}: renamer: let
   l = nixpkgs.lib // builtins;
   inherit (import ./walk.nix {inherit nixpkgs cellBlock;}) walkPaisano;
   inherit (import ./bee-module.nix {inherit nixpkgs;}) beeModule checkBeeAnd tranformToNixosConfig;
 
-  renamer = cell: target: "${cell}-${target}";
   walk = self:
     walkPaisano self (system: cell: [
       (l.mapAttrs (target: config: {
