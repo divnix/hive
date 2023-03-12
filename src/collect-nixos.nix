@@ -4,16 +4,20 @@
   cellBlock,
 }: let
   l = nixpkgs.lib // builtins;
-  inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir beeOptions;
+  inherit (import ./walk.nix {inherit nixpkgs cellBlock;}) walkPaisano;
+  inherit (import ./bee-module.nix {inherit nixpkgs;}) beeModule checkBeeAnd tranformToNixosConfig;
+
+  renamer = cell: target: "${cell}-${target}";
+  walk = self:
+    walkPaisano self (system: cell: [
+      (l.mapAttrs (target: config: {
+        _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
+        imports = [config];
+      }))
+      (l.mapAttrs (_: checkBeeAnd tranformToNixosConfig))
+      (l.filterAttrs (_: config: config.bee.system == system))
+      (l.mapAttrs (_: config: config.bee._evaled))
+    ])
+    renamer;
 in
-  self: let
-    comb = pasteurize self;
-    evalNode = extra: name: config: let
-      inherit (stir config) evalConfig system;
-    in
-      evalConfig {
-        inherit system;
-        modules = [extra beeOptions config];
-      };
-  in
-    l.mapAttrs (evalNode {}) comb
+  walk

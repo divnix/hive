@@ -5,34 +5,53 @@
 }: let
   l = nixpkgs.lib // builtins;
   inherit (inputs) colmena;
-  inherit (import ./pasteurize.nix {inherit nixpkgs cellBlock;}) pasteurize stir beeOptions;
+  inherit (import ./walk.nix {inherit nixpkgs cellBlock;}) walkPaisano;
+  inherit (import ./bee-module.nix {inherit nixpkgs;}) beeModule checkBeeAnd tranformToNixosConfig;
 
-  colmenaModules = [
+  colmenaModules = l.map (l.setDefaultModuleLocation (./collect-colmena.nix + ":colmenaModules")) [
     # these modules are tied to the below schemaversion
     # so we fix them here
     colmena.nixosModules.assertionModule
     colmena.nixosModules.keyChownModule
     colmena.nixosModules.keyServiceModule
     colmena.nixosModules.deploymentOptions
-    beeOptions # still present, but we dont care
+    {
+      environment.etc."nixos/configuration.nix".text = ''
+        throw '''
+          This machine is not managed by nixos-rebuild, but by colmena.
+        '''
+      '';
+    }
   ];
-in
-  self: let
-    comb = pasteurize self;
-    evalNode = extra: name: config: let
-      inherit (stir config) evalConfig system;
-    in
-      evalConfig {
-        inherit system;
-        modules = colmenaModules ++ [extra config];
-        specialArgs = {inherit name;};
-      };
+
+  tranformToNixosConfig' = name: evaled: locatedConfig: let
+    config = {
+      imports = [locatedConfig] ++ colmenaModules;
+      _module.args = { inherit name; };
+    };
   in
-    # Exported attributes
+    tranformToNixosConfig evaled config;
+
+  renamer = cell: target: "${cell}-${target}";
+  walk = self:
+    walkPaisano self (system: cell: [
+      (l.mapAttrs (target: config: {
+        _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
+        imports = [config];
+      }))
+      (l.mapAttrs (target:
+        checkBeeAnd (
+          tranformToNixosConfig' (renamer cell target)
+        )))
+      (l.filterAttrs (_: config: config.bee.system == system))
+    ])
+    renamer;
+
+  colmenaTopLevelCliSchema = comb:
     l.fix (this: {
       __schema = "v0";
 
-      nodes = l.mapAttrs (evalNode {_module.check = true;}) comb;
+      nodes = l.mapAttrs (_: c: c.bee._evaled) comb;
       toplevel = l.mapAttrs (_: v: v.config.system.build.toplevel) this.nodes;
       deploymentConfig = l.mapAttrs (_: v: v.config.deployment) this.nodes;
       deploymentConfigSelected = names: l.filterAttrs (name: _: l.elem name names) this.deploymentConfig;
@@ -48,6 +67,8 @@ in
         f {
           lib = nixpkgs.lib // builtins;
           pkgs = nixpkgs.legacyPackages.${builtins.currentSystem};
-          nodes = l.mapAttrs (evalNode {_module.check = false;}) comb;
+          nodes = l.mapAttrs (_: c: c.bee._unchecked) comb;
         };
-    })
+    });
+in
+  self: colmenaTopLevelCliSchema (walk self)
