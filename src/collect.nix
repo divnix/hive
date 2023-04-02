@@ -33,7 +33,7 @@
     colmenaConfigurations = import ./collect-colmena.nix {
       cellBlock = "colmenaConfigurations";
       inherit nixpkgs;
-      inputs = requireInput "colmena" "github:zhaofengli/colmena" "collect \"colmenaConfigurations\"";
+      inputs = requireInput "colmena" "github:zhaofengli/colmena" "`hive.collect \"colmenaConfigurations\"`";
     };
     homeConfigurations = import ./collect-home.nix {
       cellBlock = "homeConfigurations";
