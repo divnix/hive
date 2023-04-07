@@ -30,6 +30,26 @@
         "type": "github"
       }
     },
+    "haumea": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1680888983,
+        "narHash": "sha256-h7Goeg91oyjFCl2C2GYoAnEiZGuHmi6UkJjGbHAd8ng=",
+        "owner": "nix-community",
+        "repo": "haumea",
+        "rev": "7ee8f8c83df6a0eb66de6d8c4e27b16fdc4ddd32",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "haumea",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "locked": {
         "lastModified": 1625557891,
@@ -117,6 +137,7 @@
       "inputs": {
         "colmena": "colmena",
         "disko": "disko",
+        "haumea": "haumea",
         "home-manager": "home-manager",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",

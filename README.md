@@ -6,7 +6,8 @@
 
 ---
 
-[![Standard](https://img.shields.io/badge/Nix-Standard-green?style=for-the-badge&logo=NixOS)](https://github.com/divnix/std)
+[![Paisano](https://img.shields.io/badge/Nix-Paisano-green?style=for-the-badge&logo=NixOS)](https://github.com/paisano-nix/core)
+[![Haumea](https://img.shields.io/badge/Nix-Haumea-blue?style=for-the-badge&logo=NixOS)](https://github.com/nix-community/haumea)
 [![Colmena](https://img.shields.io/badge/Nix-Colmena-yellow?style=for-the-badge&logo=NixOS)](https://github.com/zhaofengli/colmena)
 [![Nix GL](https://img.shields.io/badge/Nix-GL-orange?style=for-the-badge&logo=NixOS)](https://github.com/guibou/nixGL)
 

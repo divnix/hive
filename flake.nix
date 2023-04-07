@@ -17,6 +17,8 @@
     disko.url = "github:divnix/blank";
     nixos-generators.url = "github:divnix/blank";
     home-manager.url = "github:divnix/blank";
+    haumea.url = "github:nix-community/haumea";
+    haumea.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs: let
@@ -25,7 +27,7 @@
       inherit inputs;
       inherit (inputs) nixpkgs;
     };
-  in {
+  in inputs.haumea.lib // {
     inherit blockTypes collect;
     inherit (inputs.paisano) grow growOn pick harvest winnow;
   };
