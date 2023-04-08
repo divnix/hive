@@ -27,8 +27,24 @@
       inherit inputs;
       inherit (inputs) nixpkgs;
     };
-  in inputs.haumea.lib // {
-    inherit blockTypes collect;
-    inherit (inputs.paisano) grow growOn pick harvest winnow;
-  };
+    # compat wrapper for humea.lib.load
+    inherit (inputs) haumea;
+    load = {
+      inputs,
+      cell,
+      ...
+    } @ args:
+      with builtins;
+        haumea.lib.load (removeAttrs args ["cell" "inputs"]
+          // {
+            # `self` in paisano refers to `inputs.self.sourceInfo` 😕
+            # but is disallowed in haumea
+            inputs = removeAttrs (inputs // {inherit cell;}) ["self"];
+          });
+  in
+    haumea.lib
+    // {
+      inherit blockTypes collect load;
+      inherit (inputs.paisano) grow growOn pick harvest winnow;
+    };
 }
