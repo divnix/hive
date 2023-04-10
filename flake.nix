@@ -17,7 +17,7 @@
     disko.url = "github:divnix/blank";
     nixos-generators.url = "github:divnix/blank";
     home-manager.url = "github:divnix/blank";
-    haumea.url = "github:nix-community/haumea?ref=refs/pull/2/head";
+    haumea.url = "github:nix-community/haumea?ref=v0.2.0";
     haumea.inputs.nixpkgs.follows = "nixpkgs";
   };
 
