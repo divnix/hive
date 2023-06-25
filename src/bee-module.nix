@@ -60,6 +60,14 @@
           };
           description = "divnix/hive requires you to set the home-manager input via 'config.bee.home = inputs.home-22-05;'";
         };
+        wsl = l.mkOption {
+          type = l.mkOptionType {
+            name = "input";
+            description = "nixos-wsl input";
+            check = x: (l.isAttrs x) && (l.hasAttr "sourceInfo" x);
+          };
+          description = "divnix/hive requires you to set the home-manager input via 'config.bee.wsl = inputs.nixos-wsl;'";
+        };
         darwin = l.mkOption {
           type = l.mkOptionType {
             name = "input";
@@ -111,14 +119,23 @@
         inherit (evaled.config.bee) system pkgs;
         inherit (evaled.config.bee.pkgs) config; # nixos modules don't load this
       };
-      # seemlessly integrate hm if desired
-      imports = l.optionals evaled.options.bee.home.isDefined [
-        evaled.config.bee.home.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-        }
-      ];
+
+      imports =
+        # seemlessly integrate hm if desired
+        l.optionals evaled.options.bee.home.isDefined [
+          evaled.config.bee.home.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+          }
+        ]
+        # seemlessly integrate nixos-wsl if desired
+        ++ l.optionals evaled.options.bee.wsl.isDefined [
+          evaled.config.bee.wsl.nixosModules.wsl
+          {
+            wsl.enable = l.mkDefault true;
+          }
+        ];
     };
     eval = extra:
       import (evaled.config.bee.pkgs.path + "/nixos/lib/eval-config.nix") {
