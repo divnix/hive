@@ -15,6 +15,7 @@
       fragment,
       fragmentRelPath,
       target,
+      inputs,
     }: let
       getString = o: (l.elemAt (l.splitString ["/"] fragmentRelPath) o);
       host = (getString 0) + "-" + (getString 2);
