@@ -66,7 +66,7 @@
             description = "nixos-wsl input";
             check = x: (l.isAttrs x) && (l.hasAttr "sourceInfo" x);
           };
-          description = "divnix/hive requires you to set the home-manager input via 'config.bee.wsl = inputs.nixos-wsl;'";
+          description = "divnix/hive requires you to set the nixos-wsl input via 'config.bee.wsl = inputs.nixos-wsl;'";
         };
         darwin = l.mkOption {
           type = l.mkOptionType {
