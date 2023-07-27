@@ -22,11 +22,12 @@
   };
 
   outputs = inputs: let
-    blockTypes = import ./src/blocktypes.nix {inherit (inputs) nixpkgs;};
-    collect = import ./src/collect.nix {
-      inherit inputs;
-      inherit (inputs) nixpkgs;
+    hive = haumea.lib.load {
+      src = ./src;
+      loader = haumea.lib.loaders.scoped;
+      inputs = removeAttrs (inputs // {inherit inputs;}) ["self"];
     };
+
     # compat wrapper for humea.lib.load
     inherit (inputs) haumea;
     load = {
@@ -39,8 +40,8 @@
           // {
             loader = haumea.lib.loaders.scoped;
             transformer = with haumea.lib.transformers; [
-                liftDefault
-                (hoistLists "_imports" "imports")
+              liftDefault
+              (hoistLists "_imports" "imports")
             ];
             # `self` in paisano refers to `inputs.self.sourceInfo` 😕
             # but is disallowed in haumea
@@ -49,7 +50,8 @@
   in
     haumea.lib
     // {
-      inherit blockTypes collect load;
+      inherit load;
+      inherit (hive) blockTypes collect;
       inherit (inputs.paisano) grow growOn pick harvest winnow;
     };
 }

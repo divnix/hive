@@ -1,12 +1,15 @@
 {
   inputs,
   nixpkgs,
-  cellBlock,
+  root,
 }: renamer: let
+  cellBlock = "colmenaConfigurations";
+
   l = nixpkgs.lib // builtins;
+
+  inherit (root) requireInput walkPaisano bee-module;
   inherit (inputs) colmena;
-  inherit (import ./walk.nix {inherit nixpkgs cellBlock;}) walkPaisano;
-  inherit (import ./bee-module.nix {inherit nixpkgs;}) beeModule checkBeeAnd tranformToNixosConfig;
+  inherit (bee-module) beeModule checkBeeAnd tranformToNixosConfig;
 
   colmenaModules = l.map (l.setDefaultModuleLocation (./collect-colmena.nix + ":colmenaModules")) [
     # these modules are tied to the below schemaversion
@@ -33,7 +36,7 @@
     tranformToNixosConfig evaled config;
 
   walk = self:
-    walkPaisano self (system: cell: [
+    walkPaisano self cellBlock (system: cell: [
       (l.mapAttrs (target: config: {
         _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = [config];
@@ -70,4 +73,8 @@
         };
     });
 in
-  self: colmenaTopLevelCliSchema (walk self)
+  requireInput
+  "colmena"
+  "github:zhaofengli/colmena"
+  "`hive.collect \"colmenaConfigurations\"`"
+  (self: colmenaTopLevelCliSchema (walk self))

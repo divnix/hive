@@ -1,7 +1,12 @@
 {
   nixpkgs,
-  mkCommand,
+  root,
 }: let
+  inherit
+    (root)
+    mkCommand
+    ;
+
   l = nixpkgs.lib // builtins;
   /*
   Use the colmenaConfigurations Blocktype for

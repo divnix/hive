@@ -1,12 +1,14 @@
 {
   inputs, # unused for now
   nixpkgs,
-  cellBlock,
+  root,
 }: renamer: let
+  cellBlock = "homeConfigurations";
+
   l = nixpkgs.lib // builtins;
 
-  inherit (import ./walk.nix {inherit nixpkgs cellBlock;}) walkPaisano;
-  inherit (import ./bee-module.nix {inherit nixpkgs;}) beeModule checkBeeAnd tranformToHomeManagerConfig;
+  inherit (root) requireInput walkPaisano bee-module;
+  inherit (bee-module) beeModule checkBeeAnd tranformToHomeManagerConfig;
 
   # Error reporting
   showAssertions = let
@@ -29,7 +31,7 @@
       );
 
   walk = self:
-    walkPaisano self (system: cell: [
+    walkPaisano self cellBlock (system: cell: [
       (l.mapAttrs (target: config: {
         _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = [config];
