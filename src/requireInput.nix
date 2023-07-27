@@ -1,10 +1,16 @@
-{inputs}: input: url: target: let
+{
+  inputs,
+  root,
+}: input: url: target: return: let
+  inherit
+    (root)
+    ansi
+    ;
+
   l = inputs.nixpkgs.lib // builtins;
 
   # other than `divnix/blank`
   isBlank = input: inputs.${input}.sourceInfo.narHash == "sha256-O8/MWsPBGhhyPoPLHZAuoZiiHo9q6FLlEeIDEXuj6T4=";
-
-  ansi = import ./ansi.nix;
 
   pad = n: s: let
     prefix = l.concatStringsSep "" (l.genList (_: " ") n);
@@ -66,4 +72,4 @@ in
     ─────┼─────────────────────────────────────────────────────────────────────────
       🙋 │ ${indent inputs'}
     ─────┴─────────────────────────────────────────────────────────────────────────
-  ''); inputs
+  ''); return

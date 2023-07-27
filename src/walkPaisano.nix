@@ -1,10 +1,7 @@
-{
-  nixpkgs,
-  cellBlock,
-}: let
+{nixpkgs}: let
   l = nixpkgs.lib // builtins;
 
-  walkPaisano = self: ops: namer:
+  walkPaisano = self: cellBlock: ops: namer:
     l.pipe (
       l.mapAttrs (system:
         l.mapAttrs (cell: blocks: (
@@ -19,4 +16,5 @@
       (l.collect (x: x ? name && x ? value))
       l.listToAttrs
     ];
-in {inherit walkPaisano;}
+in
+  walkPaisano
