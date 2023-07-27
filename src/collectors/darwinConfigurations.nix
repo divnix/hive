@@ -7,8 +7,7 @@
 
   l = nixpkgs.lib // builtins;
 
-  inherit (root) requireInput walkPaisano bee-module;
-  inherit (bee-module) beeModule checkBeeAnd tranformToDarwinConfig;
+  inherit (root) requireInput walkPaisano checks transformers;
 
   walk = self:
     walkPaisano self cellBlock (system: cell: [
@@ -16,7 +15,8 @@
         _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = [config];
       }))
-      (l.mapAttrs (_: checkBeeAnd tranformToDarwinConfig))
+      (l.mapAttrs (_: checks.bee))
+      (l.mapAttrs (_: transformers.darwinConfigurations))
       (l.filterAttrs (_: config: config.bee.system == system))
       (l.mapAttrs (_: config: config.bee._evaled))
     ])
