@@ -7,8 +7,7 @@
 
   l = nixpkgs.lib // builtins;
 
-  inherit (root) requireInput walkPaisano bee-module;
-  inherit (bee-module) beeModule checkBeeAnd tranformToHomeManagerConfig;
+  inherit (root) requireInput walkPaisano checks transformers;
 
   # Error reporting
   showAssertions = let
@@ -36,7 +35,8 @@
         _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = [config];
       }))
-      (l.mapAttrs (target: checkBeeAnd tranformToHomeManagerConfig))
+      (l.mapAttrs (_: checks.bee))
+      (l.mapAttrs (_: transformers.homeConfigurations))
       (l.filterAttrs (_: config: config.bee.system == system))
       (l.mapAttrs (_: config: config.bee._evaled))
       (l.mapAttrs (_: hmCliSchema))
