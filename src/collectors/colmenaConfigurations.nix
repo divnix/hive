@@ -32,7 +32,7 @@
       _module.args = {inherit name;};
     };
   in
-    transformers.nixosConfigurations {inherit evaled config;};
+    transformers.nixosConfigurations {inherit evaled; locatedConfig = config;};
 
   walk = self:
     walkPaisano self cellBlock (system: cell: [
