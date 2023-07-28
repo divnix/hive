@@ -37,13 +37,13 @@ in {
         config,
         lib,
         ...
-      } @ profileInputs: {
+      } @ moduleInputs: {
         options.bee._profiles."${renamer cell target}".enable = lib.mkOption {
           type = lib.types.bool;
           default = lib.elem (renamer cell target) config.bee.profiles;
           description = "En-/Disable profile ${renamer cell target}";
         };
-        config = lib.mkIf (config.bee._profiles."${renamer cell target}".enable) (profile profileInputs);
+        config = lib.mkIf (config.bee._profiles."${renamer cell target}".enable) (profile (renamer cell) moduleInputs);
       })))
     (l.mapAttrs (target: checks.profiles))
   ];
