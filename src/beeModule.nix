@@ -92,11 +92,11 @@ in {
       description = "divnix/hive requires you to define which profiles should be applied to this host system via 'config.bee.profiles = [\"core-example\"]'";
     };
     extraModules = l.mkOption {
-      type = l.types.listOf l.types.unspecified; # TODO type of modules
+      type = l.types.listOf l.types.unspecified;
       default = [];
     };
     extraProfiles = l.mkOption {
-      type = l.types.listOf l.types.unspecified; # TODO type of profiels
+      type = l.types.listOf l.types.unspecified;
       default = [];
     };
   };
