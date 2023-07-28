@@ -3,12 +3,16 @@
   nixpkgs,
   root,
   super,
-}: let
-  inherit (root) transformers;
+}: cellBlock: renamer: let
+  l = nixpkgs.lib // builtins;
+
+  inherit (root) walkPaisano transformers collectorOps;
+
+  walk = flakeRoot:
+    walkPaisano.root
+    flakeRoot
+    cellBlock
+    (collectorOps.nixosConfigurations flakeRoot cellBlock "darwinModules" "darwinProfiles" transformers.${cellBlock} renamer)
+    renamer;
 in
-  super.nixosConfigurations
-  // {
-    modulesCellBlock = "darwinModules";
-    profilesCellBlock = "darwinProfiles";
-    transformer = transformers.darwinConfigurations;
-  }
+  walk

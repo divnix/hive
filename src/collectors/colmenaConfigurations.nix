@@ -5,7 +5,7 @@
 }: cellBlock: renamer: let
   l = nixpkgs.lib // builtins;
 
-  inherit (root) requireInput walkPaisano checks transformers;
+  inherit (root) requireInput walkPaisano checks transformers collectorOps;
   inherit (inputs) colmena;
 
   colmenaModules = l.map (l.setDefaultModuleLocation (./collect-colmena.nix + ":colmenaModules")) [
@@ -25,20 +25,10 @@
   ];
 
   walk = flakeRoot:
-    walkPaisano.root flakeRoot cellBlock (system: cell: let
-      locatedNixosModules =
-        l.attrValues (walkPaisano.cell flakeRoot cell "nixosModules" super.nixosModules root.renamers.target);
-      locatedNixosProfiles =
-        l.attrValues (walkPaisano.cell flakeRoot cell "nixosProfiles" super.nixosProfiles root.renamers.target);
-    in [
-      (l.mapAttrs (target: config: {
-        _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
-        imports = [config];
-      }))
-      (l.mapAttrs (_: checks.bee locatedNixosModules locatedNixosProfiles))
-      (l.mapAttrs (target: transformers.colmenaConfigurations (renamer cell target)))
-      (l.filterAttrs (_: config: config.bee.system == system))
-    ])
+    walkPaisano.root
+    flakeRoot
+    cellBlock
+    (collectorOps.nixosConfigurations flakeRoot cellBlock "nixosModules" "nixosProfiles" transformers.${cellBlock} renamer)
     renamer;
 
   colmenaTopLevelCliSchema = comb:
