@@ -85,5 +85,9 @@ in {
         then x.${config.bee.system}
         else x;
     };
+    profiles = l.mkOption {
+      type = l.types.listOf l.types.str;
+      description = "divnix/hive requires you to define which profiles should be applied to this host system via 'config.bee.profiles = [\"core-example\"]'";
+    };
   };
 }

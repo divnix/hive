@@ -9,16 +9,12 @@
       /*
       Modules declare an interface into a problem domain
       */
-      darwinModules = throw "not implemented yet";
-      nixosModules = throw "not implemented yet";
       homeModules = throw "not implemented yet";
       shellModules = throw "not implemented yet";
       /*
       Profiles define values on that interface
       */
       hardwareProfiles = throw "not implemented yet";
-      darwinProfiles = throw "not implemented yet";
-      nixosProfiles = throw "not implemented yet";
       homeProfiles = throw "not implemented yet";
       shellProfiles = throw "not implemented yet";
       /*

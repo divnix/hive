@@ -4,6 +4,8 @@
 }: {
   evaled,
   locatedConfig,
+  locatedModules,
+  locatedProfiles,
 }: let
   l = nixpkgs.lib // builtins;
 
@@ -33,11 +35,13 @@
         }
       ];
   };
+
+  evalModules = [beeModule locatedConfig extraConfig] ++ locatedModules ++ locatedProfiles;
   eval = extra:
     import (evaled.config.bee.pkgs.path + "/nixos/lib/eval-config.nix") {
       # signal to use nixpkgs.system before: https://github.com/NixOS/nixpkgs/pull/220743
       system = null;
-      modules = [beeModule locatedConfig extraConfig extra];
+      modules = evalModules ++ [extra];
     };
   bee =
     evaled.config.bee
@@ -48,5 +52,5 @@
 in {
   inherit bee;
   # complete module set, can be lib.evalModuled as-is
-  imports = [beeModule locatedConfig extraConfig] ++ nixosModules;
+  imports = evalModules ++ nixosModules;
 }

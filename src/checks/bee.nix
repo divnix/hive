@@ -3,16 +3,19 @@
 
   inherit (root) beeModule;
 
-  check = locatedConfig: let
+  check = locatedModules: locatedProfiles: locatedConfig: let
     checked = l.nixos.evalModules {
-      modules = [
-        locatedConfig
-        beeModule
-        {
-          config._module.check = true;
-          config._module.freeformType = l.types.unspecified;
-        }
-      ];
+      modules =
+        [
+          locatedConfig
+          beeModule
+          {
+            config._module.check = true;
+            config._module.freeformType = l.types.unspecified;
+          }
+        ]
+        ++ locatedModules
+        ++ locatedProfiles;
     };
 
     failedAsserts = map (x: x.message) (l.filter (x: !x.assertion) checked.config.bee._alerts);
@@ -23,7 +26,7 @@
       else checked;
   in
     assert l.isAttrs asserted; {
-      inherit locatedConfig;
+      inherit locatedConfig locatedModules locatedProfiles;
       evaled = asserted;
     };
 in

@@ -26,22 +26,23 @@
     }
   ];
 
-  transformToNixosConfigurations = name: evaled: locatedConfig: let
-    config = {
-      imports = [locatedConfig] ++ colmenaModules;
-      _module.args = {inherit name;};
-    };
+  walk = self: let
+    locatedNixosModules =
+      if l.hasAttr "nixosModules" self
+      then l.attrValues self.nixosModules
+      else [];
+    locatedNixosProfiles =
+      if l.hasAttr "nixosProfiles" self
+      then l.attrValues self.nixosProfiles
+      else [];
   in
-    transformers.nixosConfigurations {inherit evaled; locatedConfig = config;};
-
-  walk = self:
     walkPaisano self cellBlock (system: cell: [
       (l.mapAttrs (target: config: {
         _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = [config];
       }))
-      (l.mapAttrs (_: checks.bee))
-      (l.mapAttrs (target: transformToNixosConfigurations (renamer cell target)))
+      (l.mapAttrs (_: checks.bee locatedNixosModules locatedNixosProfiles))
+      (l.mapAttrs (target: transformers.colmenaConfigurations (renamer cell target)))
       (l.filterAttrs (_: config: config.bee.system == system))
     ])
     renamer;

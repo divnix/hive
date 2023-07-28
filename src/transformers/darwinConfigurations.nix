@@ -4,6 +4,8 @@
 }: {
   evaled,
   locatedConfig,
+  locatedModules,
+  locatedProfiles,
 }: let
   l = nixpkgs.lib // builtins;
 
@@ -24,6 +26,8 @@
       }
     ];
   };
+
+  evalModules = [beeModule locatedConfig extraConfig] ++ locatedModules ++ locatedProfiles;
   eval = extra:
     evaled.config.bee.darwin.lib.darwinSystem {
       inherit (evaled.config.bee) system pkgs;
@@ -38,5 +42,5 @@
 in {
   inherit bee;
   # complete module set, can be lib.evalModuled as-is
-  imports = [beeModule locatedConfig extraConfig] ++ darwinModules;
+  imports = evalModules ++ darwinModules;
 }
