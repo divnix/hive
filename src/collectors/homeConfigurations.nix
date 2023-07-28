@@ -2,9 +2,7 @@
   inputs, # unused for now
   nixpkgs,
   root,
-}: renamer: let
-  cellBlock = "homeConfigurations";
-
+}: cellBlock: renamer: let
   l = nixpkgs.lib // builtins;
 
   inherit (root) requireInput walkPaisano checks transformers;
@@ -30,7 +28,7 @@
       );
 
   walk = self:
-    walkPaisano self cellBlock (system: cell: [
+    walkPaisano.root self cellBlock (system: cell: [
       (l.mapAttrs (target: config: {
         _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = [config];

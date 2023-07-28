@@ -1,6 +1,8 @@
 {nixpkgs}: {config, ...}: let
   l = nixpkgs.lib // builtins;
 
+  cfg = config.bee;
+
   erase = optionName: instruction: {options, ...}: let
     opt = l.getAttrFromPath optionName options;
   in {
@@ -88,6 +90,14 @@ in {
     profiles = l.mkOption {
       type = l.types.listOf l.types.str;
       description = "divnix/hive requires you to define which profiles should be applied to this host system via 'config.bee.profiles = [\"core-example\"]'";
+    };
+    extraModules = l.mkOption {
+      type = l.types.listOf l.types.unspecified; # TODO type of modules
+      default = [];
+    };
+    extraProfiles = l.mkOption {
+      type = l.types.listOf l.types.unspecified; # TODO type of profiels
+      default = [];
     };
   };
 }

@@ -1,0 +1,1 @@
+{nixpkgs}: nixpkgs.lib.id

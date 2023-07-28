@@ -2,9 +2,7 @@
   inputs,
   nixpkgs,
   root,
-}: renamer: let
-  cellBlock = "colmenaConfigurations";
-
+}: cellBlock: renamer: let
   l = nixpkgs.lib // builtins;
 
   inherit (root) requireInput walkPaisano checks transformers;
@@ -26,17 +24,13 @@
     }
   ];
 
-  walk = self: let
-    locatedNixosModules =
-      if l.hasAttr "nixosModules" self
-      then l.attrValues self.nixosModules
-      else [];
-    locatedNixosProfiles =
-      if l.hasAttr "nixosProfiles" self
-      then l.attrValues self.nixosProfiles
-      else [];
-  in
-    walkPaisano self cellBlock (system: cell: [
+  walk = flakeRoot:
+    walkPaisano.root flakeRoot cellBlock (system: cell: let
+      locatedNixosModules =
+        l.attrValues (walkPaisano.cell flakeRoot cell "nixosModules" super.nixosModules root.renamers.target);
+      locatedNixosProfiles =
+        l.attrValues (walkPaisano.cell flakeRoot cell "nixosProfiles" super.nixosProfiles root.renamers.target);
+    in [
       (l.mapAttrs (target: config: {
         _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = [config];

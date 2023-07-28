@@ -2,34 +2,13 @@
   inputs,
   nixpkgs,
   root,
-}: renamer: let
-  cellBlock = "nixosModules";
-
+  super,
+}: cellBlock: renamer: let
   l = nixpkgs.lib // builtins;
 
   inherit (root) walkPaisano checks;
+  inherit (super) ops;
 
-  walk = self:
-    walkPaisano self cellBlock (system: cell: [
-      (l.mapAttrs (target: module: ({
-          config,
-          lib,
-          ...
-        } @ moduleInputs: let
-          evaled = module (renamer cell target) moduleInputs;
-        in {
-          options.bee.modules."${renamer cell target}" =
-            {
-              enable = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = "En-/Disable module ${renamer cell target}";
-              };
-            }
-            // evaled.options;
-          config = lib.mkIf (config.bee.modules."${renamer cell target}".enable) evaled.config;
-        })))
-    ])
-    renamer;
+  walk = flakeRoot: walkPaisano.root flakeRoot cellBlock (ops.modules renamer) renamer;
 in
   walk

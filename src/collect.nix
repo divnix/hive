@@ -26,14 +26,14 @@
       shellSuites = throw "not implemented yet";
     };
 in {
-  renamer = cell: target: "${cell}-${target}";
-  __functor = self: Self: CellBlock:
-    if builtins.hasAttr CellBlock collectors
-    then collectors.${CellBlock} self.renamer Self
+  renamer = root.renamers.cell-target;
+  __functor = self: flakeRoot: cellBlock:
+    if builtins.hasAttr cellBlock collectors
+    then collectors.${cellBlock} cellBlock self.renamer flakeRoot
     else
       builtins.throw ''
 
-        `hive.collect` can't collect ${CellBlock}.
+        `hive.collect` can't collect ${cellBlock}.
 
         It can collect the following cell blocks:
          - ${builtins.concatStringsSep "\n - " (builtins.attrNames collectors)}
