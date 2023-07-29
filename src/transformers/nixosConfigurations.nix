@@ -42,7 +42,7 @@
       # signal to use nixpkgs.system before: https://github.com/NixOS/nixpkgs/pull/220743
       system = null;
       modules = evalModules ++ [extra];
-      pkgs = evaled.config.bee.pkgs;
+      pkgs = evaled.config.bee.pkgs; # only sets _module.args.pkgs
       extraModules = locatedModules ++ locatedProfiles;
     };
   bee =
