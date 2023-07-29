@@ -29,7 +29,7 @@
   ];
 
   config = {
-    imports = [locatedConfig] ++ colmenaModules;
+    imports = [locatedConfig] ++ colmenaModules ++ locatedModules ++ locatedProfiles;
     _modules.args = {inherit name;};
   };
 in

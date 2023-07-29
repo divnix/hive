@@ -31,7 +31,7 @@
   eval = extra:
     evaled.config.bee.darwin.lib.darwinSystem {
       inherit (evaled.config.bee) system pkgs;
-      modules = [beeModule locatedConfig extraConfig extra];
+      modules = evalModules;
     };
   bee =
     evaled.config.bee
