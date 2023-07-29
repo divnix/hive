@@ -1,6 +1,13 @@
-{nixpkgs}: let
+{
+  nixpkgs,
+  root,
+}: let
+  inherit
+    (root)
+    mkCommand
+    ;
+
   l = nixpkgs.lib // builtins;
-  mkCommand = import ./mkCommand.nix {inherit nixpkgs;};
 
   contextFreeDrv = target: l.unsafeDiscardStringContext target.drvPath;
 

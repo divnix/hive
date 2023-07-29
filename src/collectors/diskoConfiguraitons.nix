@@ -1,15 +1,15 @@
 {
   inputs, # unused for now
   nixpkgs,
-  cellBlock,
-}: renamer: let
+  root,
+}: cellBlock: renamer: let
   l = nixpkgs.lib // builtins;
 
-  inherit (import ./walk.nix {inherit nixpkgs cellBlock;}) walkPaisano;
+  inherit (root) requireInput walkPaisano;
 
   # same as pasteurize, but for disko where the system doesn't matter
   sing = self:
-    walkPaisano self (system: cell: [
+    walkPaisano.root self cellBlock (system: cell: [
       (l.filterAttrs (_: _: "x86_64-linux" == system)) # pick one
     ])
     renamer;
