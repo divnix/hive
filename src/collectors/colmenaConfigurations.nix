@@ -5,24 +5,7 @@
 }: cellBlock: renamer: let
   l = nixpkgs.lib // builtins;
 
-  inherit (root) requireInput walkPaisano checks transformers collectorOps;
-  inherit (inputs) colmena;
-
-  colmenaModules = l.map (l.setDefaultModuleLocation (./collect-colmena.nix + ":colmenaModules")) [
-    # these modules are tied to the below schemaversion
-    # so we fix them here
-    colmena.nixosModules.assertionModule
-    colmena.nixosModules.keyChownModule
-    colmena.nixosModules.keyServiceModule
-    colmena.nixosModules.deploymentOptions
-    {
-      environment.etc."nixos/configuration.nix".text = ''
-        throw '''
-          This machine is not managed by nixos-rebuild, but by colmena.
-        '''
-      '';
-    }
-  ];
+  inherit (root) requireInput walkPaisano transformers collectorOps;
 
   walk = flakeRoot:
     walkPaisano.root
