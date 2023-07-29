@@ -44,7 +44,7 @@ in {
         lib,
         ...
       } @ moduleInputs: let
-        evaled = module (renamer cell target) moduleInputs;
+        evaled = module (renamer cell) (renamer cell target) moduleInputs;
       in {
         _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = l.attrByPath ["imports"] [] evaled;
