@@ -30,7 +30,7 @@ in {
       checkResults
       // {
         locatedModules = locatedCellModules ++ extraModules;
-        locatedProfiles = locatedCellModules ++ extraProfiles;
+        locatedProfiles = locatedCellProfiles ++ extraProfiles;
       }))
     (l.mapAttrs (_: transformer))
     (l.filterAttrs (_: config: config.bee.system == system))
