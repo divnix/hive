@@ -14,9 +14,9 @@
 in {
   nixosConfigurations = flakeRoot: cellBlock: modulesCellBlock: profilesCellBlock: transformer: renamer: system: cell: let
     locatedCellModules =
-      l.attrValues (walkPaisano.cell flakeRoot cell modulesCellBlock (self.modules renamer) renamer);
+      l.attrValues (walkPaisano.cell flakeRoot cell modulesCellBlock (self.modules cellBlock renamer) renamer);
     locatedCellProfiles =
-      l.attrValues (walkPaisano.cell flakeRoot cell profilesCellBlock (self.profiles renamer) renamer);
+      l.attrValues (walkPaisano.cell flakeRoot cell profilesCellBlock (self.profiles cellBlock renamer) renamer);
   in [
     (l.mapAttrs (target: config: {
       _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
@@ -37,7 +37,7 @@ in {
     (l.mapAttrs (_: config: config.bee._evaled))
   ];
 
-  modules = renamer: system: cell: [
+  modules = cellBlock: renamer: system: cell: [
     (l.mapAttrs (target: module: ({
         config,
         lib,
@@ -45,6 +45,7 @@ in {
       } @ moduleInputs: let
         evaled = module (renamer cell target) moduleInputs;
       in {
+        _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = l.attrByPath ["imports"] [] evaled;
         options.bee.modules."${renamer cell target}" =
           {
@@ -60,7 +61,7 @@ in {
     (l.mapAttrs (target: checks.modules))
   ];
 
-  profiles = renamer: system: cell: [
+  profiles = cellBlock: renamer: system: cell: [
     (l.mapAttrs (target: profile: ({
         config,
         lib,
@@ -68,6 +69,7 @@ in {
       } @ moduleInputs: let
         evaled = profile (renamer cell) moduleInputs;
       in {
+        _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
         imports = l.attrByPath ["imports"] [] evaled;
         options.bee._profiles."${renamer cell target}".enable = lib.mkOption {
           type = lib.types.bool;

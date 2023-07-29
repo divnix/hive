@@ -8,6 +8,6 @@
 
   inherit (root) walkPaisano checks collectorOps;
 
-  walk = flakeRoot: walkPaisano.root flakeRoot cellBlock (collectorOps.profiles renamer) renamer;
+  walk = flakeRoot: walkPaisano.root flakeRoot cellBlock (collectorOps.profiles cellBlock renamer) renamer;
 in
   walk
