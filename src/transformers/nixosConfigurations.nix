@@ -36,12 +36,14 @@
       ];
   };
 
-  evalModules = [beeModule locatedConfig extraConfig] ++ locatedModules ++ locatedProfiles;
+  evalModules = [beeModule locatedConfig extraConfig];
   eval = extra:
     import (evaled.config.bee.pkgs.path + "/nixos/lib/eval-config.nix") {
       # signal to use nixpkgs.system before: https://github.com/NixOS/nixpkgs/pull/220743
       system = null;
       modules = evalModules ++ [extra];
+      pkgs = evaled.config.bee.pkgs;
+      extraModules = locatedModules ++ locatedProfiles;
     };
   bee =
     evaled.config.bee
