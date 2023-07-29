@@ -22,7 +22,7 @@ in {
       _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
       imports = [config];
     }))
-    (l.mapAttrs (_: checks.bee))
+    (l.mapAttrs (_: checks.bee system))
     (l.mapAttrs (_: checkResults: let
       extraModules = checkResults.evaled.config.bee.extraModules;
       extraProfiles = checkResults.evaled.config.bee.extraProfiles;
@@ -39,6 +39,7 @@ in {
 
   modules = cellBlock: renamer: system: cell: [
     (l.mapAttrs (target: module: ({
+        pkgs,
         config,
         lib,
         ...
@@ -63,6 +64,7 @@ in {
 
   profiles = cellBlock: renamer: system: cell: [
     (l.mapAttrs (target: profile: ({
+        pkgs,
         config,
         lib,
         ...

@@ -1,13 +1,13 @@
 {
   nixpkgs,
   root,
-}: let
+}: system: let
   l = nixpkgs.lib // builtins;
 
   inherit (root) beeModule;
 
   evalModulesMinimal =
-    (import (nixpkgs.path + "/nixos/lib/default.nix") {
+    (import (nixpkgs.legacyPackages.${system}.path + "/nixos/lib/default.nix") {
       featureFlags.minimalModules = {};
     })
     .evalModules;
