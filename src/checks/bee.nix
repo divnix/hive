@@ -6,8 +6,14 @@
 
   inherit (root) beeModule;
 
+  evalModulesMinimal =
+    (import (nixpkgs.path + "/nixos/lib/default.nix") {
+      featureFlags.minimalModules = {};
+    })
+    .evalModules;
+
   check = locatedConfig: let
-    checked = l.nixos.evalModules {
+    checked = evalModulesMinimal {
       modules = [
         locatedConfig
         beeModule
