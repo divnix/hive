@@ -1,4 +1,7 @@
-{nixpkgs}: let
+{
+  nixpkgs,
+  root,
+}: let
   l = nixpkgs.lib // builtins;
 
   inherit (root) beeModule;
