@@ -14,9 +14,9 @@
 in {
   nixosConfigurations = flakeRoot: cellBlock: modulesCellBlock: profilesCellBlock: transformer: renamer: system: cell: let
     locatedCellModules =
-      l.attrValues (walkPaisano.cell flakeRoot cell modulesCellBlock (self.modules cellBlock renamer) renamer);
+      l.attrValues (walkPaisano.cell flakeRoot cell modulesCellBlock (self.modules modulesCellBlock renamer) renamer);
     locatedCellProfiles =
-      l.attrValues (walkPaisano.cell flakeRoot cell profilesCellBlock (self.profiles cellBlock renamer) renamer);
+      l.attrValues (walkPaisano.cell flakeRoot cell profilesCellBlock (self.profiles profilesCellBlock renamer) renamer);
   in [
     (l.mapAttrs (target: config: {
       _file = "Cell: ${cell} - Block: ${cellBlock} - Target: ${target}";
