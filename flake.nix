@@ -51,7 +51,7 @@
     haumea.lib
     // {
       inherit load;
-      inherit (hive) blockTypes collect collectOps walkPaisano mkCommand renamers;
+      inherit (hive) blockTypes collect collectorOps walkPaisano mkCommand renamers;
       inherit (inputs.paisano) grow growOn pick harvest winnow;
     };
 }
