@@ -1,20 +1,17 @@
 {
   nixpkgs,
   root,
+  super,
 }: let
   inherit
     (root)
     mkCommand
     ;
-
-  l = nixpkgs.lib // builtins;
-
-  nixosModules = {
-    name = "nixosModules";
-    type = "nixosModules";
-    # nixosGenerator's actions?
-    # microvm action?
-    # nixos-rebuild action?
-  };
-in
-  nixosModules
+in {
+  __functor = super.addSelectorToFunctor;
+  name = "nixosModules";
+  type = "nixosModules";
+  # nixosGenerator's actions?
+  # microvm action?
+  # nixos-rebuild action?
+}
