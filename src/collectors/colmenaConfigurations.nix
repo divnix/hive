@@ -26,7 +26,7 @@
     }
   ];
 
-  transformToNixosConfigurations = name: evaled: locatedConfig: let
+  transformToNixosConfigurations = name: {evaled, locatedConfig}: let
     config = {
       imports = [locatedConfig] ++ colmenaModules;
       _module.args = {inherit name;};
