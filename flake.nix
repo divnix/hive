@@ -33,20 +33,19 @@
     load = {
       inputs,
       cell,
-      ...
-    } @ args:
-      with builtins;
-        haumea.lib.load (removeAttrs args ["cell" "inputs"]
-          // {
-            loader = haumea.lib.loaders.scoped;
-            transformer = with haumea.lib.transformers; [
-              liftDefault
-              (hoistLists "_imports" "imports")
-            ];
-            # `self` in paisano refers to `inputs.self.sourceInfo` 😕
-            # but is disallowed in haumea
-            inputs = removeAttrs (inputs // {inherit inputs cell;}) ["self"];
-          });
+      src,
+    }:
+    # modules/profiles are always functions
+    {config, options, ...}:
+      haumea.lib.load {
+        inherit src;
+        loader = haumea.lib.loaders.scoped;
+        transformer = with haumea.lib.transformers; [
+          liftDefault
+          (hoistLists "_imports" "imports")
+        ];
+        inputs = {inherit inputs cell config options;};
+      };
   in
     haumea.lib
     // {
