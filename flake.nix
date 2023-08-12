@@ -37,9 +37,13 @@
       src,
     }:
     # modules/profiles are always functions
-    {config, options, ...}: let
-       cr = cell._cr ++ [ baseNameOf src ];
-       file = "${inputs.self.outPath}#${lib.concatStringsSep "/" cr}";
+    {
+      config,
+      options,
+      ...
+    }: let
+      cr = cell._cr ++ [baseNameOf src];
+      file = "${inputs.self.outPath}#${lib.concatStringsSep "/" cr}";
     in
       lib.setDefaultModuleLocation file (haumea.lib.load {
         inherit src;
@@ -50,10 +54,24 @@
         ];
         inputs = {inherit inputs cell config options;};
       });
+
+    findLoad = {
+      inputs,
+      cell,
+      block,
+    }:
+      with builtins;
+        mapAttrs
+        (n: _:
+          load {
+            inherit inputs cell;
+            src = block + /${n};
+          })
+        (lib.filterAttrs (_: v: v == "directory") (readDir block));
   in
     haumea.lib
     // {
-      inherit load;
+      inherit load findLoad;
       inherit (hive) blockTypes collect;
       inherit (inputs.paisano) grow growOn pick harvest winnow;
     };
