@@ -30,14 +30,18 @@
 
     # compat wrapper for humea.lib.load
     inherit (inputs) haumea;
+    inherit (inputs.nixpkgs) lib;
     load = {
       inputs,
       cell,
       src,
     }:
     # modules/profiles are always functions
-    {config, options, ...}:
-      haumea.lib.load {
+    {config, options, ...}: let
+       cr = cell._cr ++ [ baseNameOf src ];
+       file = "${inputs.self.outPath}#${lib.concatStringsSep "/" cr}";
+    in
+      lib.setDefaultModuleLocation file (haumea.lib.load {
         inherit src;
         loader = haumea.lib.loaders.scoped;
         transformer = with haumea.lib.transformers; [
@@ -45,7 +49,7 @@
           (hoistLists "_imports" "imports")
         ];
         inputs = {inherit inputs cell config options;};
-      };
+      });
   in
     haumea.lib
     // {
