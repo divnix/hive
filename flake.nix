@@ -42,7 +42,7 @@
       options,
       ...
     }: let
-      cr = cell._cr ++ [baseNameOf src];
+      cr = cell.__cr ++ [(baseNameOf src)];
       file = "${inputs.self.outPath}#${lib.concatStringsSep "/" cr}";
     in
       lib.setDefaultModuleLocation file (haumea.lib.load {
