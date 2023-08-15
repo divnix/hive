@@ -28,7 +28,7 @@
       inputs = removeAttrs (inputs // {inherit inputs;}) ["self"];
     };
 
-    # compat wrapper for humea.lib.load
+    # compat wrapper for haumea.lib.load
     inherit (inputs) haumea;
     inherit (inputs.nixpkgs) lib;
     load = {
