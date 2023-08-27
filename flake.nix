@@ -44,16 +44,23 @@
     }: let
       cr = cell.__cr ++ [(baseNameOf src)];
       file = "${inputs.self.outPath}#${lib.concatStringsSep "/" cr}";
+
+      defaultWith = import (haumea + /src/loaders/__defaultWith.nix) {inherit lib;};
+      loader = let i = {inherit inputs cell config options;}; in defaultWith (scopedImport i) i;
     in
-      lib.setDefaultModuleLocation file (haumea.lib.load {
-        inherit src;
-        loader = haumea.lib.loaders.scoped;
-        transformer = with haumea.lib.transformers; [
-          liftDefault
-          (hoistLists "_imports" "imports")
-        ];
-        inputs = {inherit inputs cell config options;};
-      });
+      if lib.pathIsDirectory src
+      then
+        lib.setDefaultModuleLocation file (haumea.lib.load {
+          inherit src;
+          loader = haumea.lib.loaders.scoped;
+          transformer = with haumea.lib.transformers; [
+            liftDefault
+            (hoistLists "_imports" "imports")
+          ];
+          inputs = {inherit inputs cell config options;};
+        })
+      # Mimic haumea for a regular file
+      else lib.setDefaultModuleLocation file (loader src);
 
     findLoad = {
       inputs,
@@ -61,13 +68,15 @@
       block,
     }:
       with builtins;
-        mapAttrs
+        lib.mapAttrs'
         (n: _:
-          load {
+          lib.nameValuePair
+          (lib.removeSuffix ".nix" n)
+          (load {
             inherit inputs cell;
             src = block + /${n};
-          })
-        (lib.filterAttrs (_: v: v == "directory") (readDir block));
+          }))
+        (removeAttrs (readDir block) ["default.nix"]);
   in
     haumea.lib
     // {
