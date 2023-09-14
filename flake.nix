@@ -78,8 +78,30 @@
           }))
         (removeAttrs (readDir block) ["default.nix"]);
   in
+    inputs.paisano.growOn {
+      inputs =
+        inputs
+        // {
+          hive = {inherit findLoad;};
+        };
+      cellsFrom = ./aux;
+      cellBlocks = [
+        {
+          type = "pkgsFunc";
+          name = "pkgsFunc";
+        }
+        {
+          type = "profiles";
+          name = "profiles";
+        }
+        {
+          type = "shell";
+          name = "shell";
+        }
+      ];
+    }
     haumea.lib
-    // {
+    {
       inherit load findLoad;
       inherit (hive) blockTypes collect;
       inherit (inputs.paisano) grow growOn pick harvest winnow;

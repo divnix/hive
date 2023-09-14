@@ -30,4 +30,8 @@
   config = {
     imports = [locatedConfig] ++ colmenaModules;
   };
-in transformers.nixosConfigurations {inherit evaled; locatedConfig = config;}
+in
+  transformers.nixosConfigurations {
+    inherit evaled;
+    locatedConfig = config;
+  }
