@@ -8,6 +8,10 @@
 result*
 
 # nixago: ignore-linked-files
+/cog.toml
+/lefthook.yml
+/.conform.yaml
+/treefmt.toml
 .conform.yaml
 lefthook.yml
 treefmt.toml
