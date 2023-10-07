@@ -13,7 +13,6 @@
   extraConfig = {
     nixpkgs = {
       inherit (evaled.config.bee) system pkgs;
-      inherit (evaled.config.bee.pkgs) config; # nixos modules don't load this
     };
 
     imports =
