@@ -117,7 +117,7 @@
         (std.blockTypes.devshells "shells" {ci.build = true;})
       ];
     }
-    haumea.lib
+    (removeAttrs haumea.lib ["load"])
     {
       inherit load findLoad;
       inherit (hive) blockTypes collect;
