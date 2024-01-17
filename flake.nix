@@ -117,10 +117,10 @@
         (std.blockTypes.devshells "shells" {ci.build = true;})
       ];
     }
-    haumea.lib
     {
       inherit load findLoad;
       inherit (hive) blockTypes collect;
       inherit (paisano) grow growOn pick harvest winnow;
-    };
+    }
+    haumea.lib;
 }
