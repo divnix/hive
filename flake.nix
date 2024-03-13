@@ -53,14 +53,18 @@
     # modules/profiles are always functions
     {
       config,
+      lib,
+      modulesPath,
       options,
+      pkgs,
       ...
     }: let
       cr = cell.__cr ++ [(baseNameOf src)];
       file = "${self.outPath}#${lib.concatStringsSep "/" cr}";
 
+      i = {inherit inputs cell config lib modulesPath options pkgs;};
       defaultWith = import (haumea + /src/loaders/__defaultWith.nix) {inherit lib;};
-      loader = let i = {inherit inputs cell config options;}; in defaultWith (scopedImport i) i;
+      loader = defaultWith (scopedImport i) i;
     in
       if lib.pathIsDirectory src
       then
@@ -71,7 +75,7 @@
             liftDefault
             (hoistLists "_imports" "imports")
           ];
-          inputs = {inherit inputs cell config options;};
+          inputs = i;
         })
       # Mimic haumea for a regular file
       else lib.setDefaultModuleLocation file (loader src);
