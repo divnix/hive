@@ -51,18 +51,11 @@
       src,
     }:
     # modules/profiles are always functions
-    {
-      config,
-      lib,
-      modulesPath,
-      options,
-      pkgs,
-      ...
-    }: let
+    args: let
       cr = cell.__cr ++ [(baseNameOf src)];
       file = "${self.outPath}#${lib.concatStringsSep "/" cr}";
 
-      i = {inherit inputs cell config lib modulesPath options pkgs;};
+      i = args // {inherit cell inputs;};
       defaultWith = import (haumea + /src/loaders/__defaultWith.nix) {inherit lib;};
       loader = defaultWith (scopedImport i) i;
     in
