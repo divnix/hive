@@ -59,28 +59,7 @@
       cr = cell.__cr ++ [(baseNameOf src)];
       file = "${self.outPath}#${lib.concatStringsSep "/" cr}";
 
-      defaultWith = let
-        inherit
-          (lib)
-          functionArgs
-          pipe
-          toFunction
-          ;
-      in (importer: inputs: path: let
-        f = toFunction (importer path);
-      in
-        pipe f [
-          functionArgs
-          (let
-            context = name: ''while evaluating the argument `${name}' in "${file}":'';
-          in
-            builtins.mapAttrs (
-              name: _:
-                builtins.addErrorContext (context name)
-                (inputs.${name} or config._module.args.${name})
-            ))
-          f
-        ]);
+      defaultWith = importer: inputs: path: lib.modules.applyModuleArgsIfFunction file (importer path) inputs;
       loader = inputs: defaultWith (scopedImport inputs) inputs;
       i = args // {inherit cell inputs;};
     in
