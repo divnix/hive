@@ -51,7 +51,7 @@
       src,
     }:
     # modules/profiles are always functions
-    args: let
+    args @ {pkgs, ...}: let
       cr = cell.__cr ++ [(baseNameOf src)];
       file = "${self.outPath}#${lib.concatStringsSep "/" cr}";
 
