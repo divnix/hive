@@ -1,11 +1,12 @@
 let
-  inherit (inputs) nixpkgs nixos-generators nixos-anywhere;
+  inherit (inputs) nixos-generators nixos-anywhere;
+  inherit (config._module.args) pkgs;
 
   withCategory = category: attrset: attrset // {inherit category;};
 in {
   commands = [
-    (withCategory "bootstrap" {package = nixpkgs.writedisk;})
-    (withCategory "bootstrap" {package = nixos-generators.packages.nixos-generate;})
-    (withCategory "bootstrap" {package = nixpkgs.callPackage (nixos-anywhere + /src) {};})
+    (withCategory "bootstrap" {package = pkgs.writedisk;})
+    (withCategory "bootstrap" {package = pkgs.callPackage (nixos-generators + /package.nix) {};})
+    (withCategory "bootstrap" {package = pkgs.callPackage (nixos-anywhere + /src) {};})
   ];
 }

@@ -3,16 +3,16 @@
 
   inputs.disko = {
     url = "github:nix-community/disko";
-    inputs.nixpkgs.follows = "nixpkgs";
+    flake = false;
   };
 
   inputs.nixos-generators = {
-    url = "github:nix-community/nixos-generators";
-    inputs.nixpkgs.follows = "nixpkgs";
+    url = "github:nix-community/nixos-generators?ref=refs/pull/325/head";
+    flake = false;
   };
 
   inputs.nixos-anywhere = {
-    url = "github:numtide/nixos-anywhere?ref=refs/pull/213/head";
+    url = "github:numtide/nixos-anywhere";
     flake = false;
   };
 
