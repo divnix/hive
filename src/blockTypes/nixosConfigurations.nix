@@ -36,7 +36,7 @@
         inherit name description;
         command =
           bin
-          + l.optionalString (l.elem name ["switch" "boot" "test" "dry-activate"]) "echo Awaiting privilege elevation...; ${pkgs.systemd}/bin/run0 --setenv=PATH=\"$PATH\" "
+          + l.optionalString (l.elem name ["switch" "boot" "test" "dry-activate"]) "echo Awaiting privilege elevation...; ${pkgs.systemdMinimal}/bin/run0 --setenv=PATH=\"$PATH\" "
           + "nixos-rebuild ${name} --flake . $@";
       })) {
         switch = "Activate & set as default boot.";
