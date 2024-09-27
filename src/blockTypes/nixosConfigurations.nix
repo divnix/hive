@@ -24,6 +24,7 @@
       target,
       inputs,
     }: let
+      pkgs = inputs.nixpkgs.${currentSystem};
       getString = o: (l.elemAt (l.splitString ["/"] fragmentRelPath) o);
       host = (getString 0) + "-" + (getString 2);
       dc = getString 1;
@@ -35,9 +36,8 @@
         inherit name description;
         command =
           bin
-          + "${
-            l.optionalString (l.elem name ["switch" "boot" "test" "dry-activate"]) "run0 --setenv=PATH=\"$PATH\" "
-          }nixos-rebuild ${name} --flake . -L --show-trace";
+          + l.optionalString (l.elem name ["switch" "boot" "test" "dry-activate"]) "echo Awaiting privilege elevation...; ${pkgs.systemd}/bin/run0 --setenv=PATH=\"$PATH\" "
+          + "nixos-rebuild ${name} --flake . $@";
       })) {
         switch = "Activate & set as default boot.";
         boot = "Set default boot, run old config.";
