@@ -8,6 +8,11 @@
     ;
 
   l = nixpkgs.lib // builtins;
+
+  privilegeElevationCommand = inputs: pkgs:
+    if inputs.nixpkgs.lib.version > "24.05"
+    then "echo Awaiting privilege elevation...; ${pkgs.systemdMinimal}/bin/run0 --setenv=PATH=\"$PATH\" "
+    else "sudo ";
   /*
   Use the nixosConfigurations Blocktype for
   final definitions of your NixOS hosts.
@@ -32,13 +37,23 @@
         bin=$(nix build .#${dc}.${host}.system --no-link --print-out-paths)/sw/bin
         export PATH=$bin:$PATH
       '';
-    in (l.attrsets.mapAttrsToList (name: description: (mkCommand currentSystem {
-        inherit name description;
-        command =
-          bin
-          + l.optionalString (l.elem name ["switch" "boot" "test" "dry-activate"]) "echo Awaiting privilege elevation...; ${pkgs.systemdMinimal}/bin/run0 --setenv=PATH=\"$PATH\" "
-          + "nixos-rebuild ${name} --flake . $@";
-      })) {
+    in (
+      l.attrsets.mapAttrsToList
+      (
+        name: description: (mkCommand currentSystem {
+          inherit name description;
+          command =
+            bin
+            + l.optionalString (l.elem name [
+              "switch"
+              "boot"
+              "test"
+              "dry-activate"
+            ]) (privilegeElevationCommand inputs pkgs)
+            + "nixos-rebuild ${name} --flake . $@";
+        })
+      )
+      {
         switch = "Activate & set as default boot.";
         boot = "Set default boot, run old config.";
         test = "Build & activate, no boot entry.";
@@ -50,7 +65,8 @@
         build-vm = "Build script for NixOS virtual machine.";
         build-vm-with-bootloader = "Build script with host-like bootloader.";
         list-generations = "List system build generations.";
-      });
+      }
+    );
   };
 in
   nixosConfigurations
