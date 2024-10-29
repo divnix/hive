@@ -50,7 +50,7 @@
               "test"
               "dry-activate"
             ]) (privilegeElevationCommand inputs pkgs)
-            + "nixos-rebuild ${name} --flake . $@";
+            + "nixos-rebuild ${name} --flake "$PRJ_ROOT" $@";
         })
       )
       {
