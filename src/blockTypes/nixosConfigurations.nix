@@ -9,10 +9,17 @@
 
   l = nixpkgs.lib // builtins;
 
-  privilegeElevationCommand = inputs: pkgs:
-    if inputs.nixpkgs.lib.version > "24.05"
-    then "echo Awaiting privilege elevation...; ${pkgs.systemdMinimal}/bin/run0 --setenv=PATH=\"$PATH\" "
-    else "sudo ";
+  privilegeElevationCommand = pkgs:
+    pkgs.writeShellScript "elevate" ''
+      HOSTVERSION="$(systemctl --version | head -n1 | cut -d' ' -f2)"
+
+      if [ "$HOSTVERSION" -ge "256" ]; then
+          run0 --setenv=PATH="$PATH" "$@"
+      else
+          sudo "$@"
+      fi
+    '';
+
   /*
   Use the nixosConfigurations Blocktype for
   final definitions of your NixOS hosts.
@@ -49,8 +56,8 @@
               "boot"
               "test"
               "dry-activate"
-            ]) (privilegeElevationCommand inputs pkgs)
-            + "nixos-rebuild ${name} --flake \"$PRJ_ROOT\" $@";
+            ]) (privilegeElevationCommand pkgs)
+            + " nixos-rebuild ${name} --flake \"$PRJ_ROOT\" $@";
         })
       )
       {
