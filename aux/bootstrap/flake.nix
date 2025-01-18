@@ -7,7 +7,7 @@
   };
 
   inputs.nixos-generators = {
-    url = "github:nix-community/nixos-generators?ref=refs/pull/325/head";
+    url = "github:nix-community/nixos-generators";
     flake = false;
   };
 
