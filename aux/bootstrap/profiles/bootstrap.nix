@@ -38,19 +38,8 @@ in
       networking.wireless.enable = mkForce false;
       services.getty.helpLine =
         ''
-          The "nixos" and "root" accounts have empty passwords.
-
-          An ssh daemon is running. You then must set a password
-          for either "root" or "nixos" with `passwd` or add an ssh key
-          to /home/nixos/.ssh/authorized_keys be able to login.
-
-          If you need a wireless connection, type
-          `sudo systemctl start NetworkManager` and configure a
-          network using `sudo ifwifi scan` & `sudo ifwifi connect`.
-
-          To format the device(s), run `disko -m disko -f <flake#config>`
-          on the origin flake with e.g.:
-            `disko -m disko -f github:<org>/<repo>#<config>`
+          To format drives and install a system in one go, you can use diko, e.g.:
+            `disko-install --write-efi-boot-entries --flake <flake>#<config> --disk main /dev/...`
         ''
         + optionalString config.services.xserver.enable ''
 
@@ -59,7 +48,6 @@ in
         '';
 
       environment.systemPackages = [
-        pkgs.ifwifi
         (pkgs.callPackage (disko + /package.nix) {
           diskoVersion = let
             versionInfo = import (disko + /version.nix);
