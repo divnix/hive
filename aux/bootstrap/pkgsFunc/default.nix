@@ -1,1 +1,0 @@
-{ifwifi = import ./ifwifi.nix;}

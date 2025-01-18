@@ -98,10 +98,6 @@
       cellsFrom = ./aux;
       cellBlocks = [
         {
-          type = "pkgsFunc";
-          name = "pkgsFunc";
-        }
-        {
           type = "profiles";
           name = "profiles";
         }

@@ -1,6 +1,5 @@
 let
   inherit (inputs) nixos-generators disko;
-  inherit (cell.pkgsFunc) ifwifi;
   inherit (config._module.args) pkgs;
 in
   with pkgs.lib; {
@@ -60,9 +59,7 @@ in
         '';
 
       environment.systemPackages = [
-        (pkgs.callPackage ifwifi {
-          inherit (pkgs.darwin.apple_sdk.frameworks) Security;
-        })
+        pkgs.ifwifi
         (pkgs.callPackage (disko + /package.nix) {
           diskoVersion = let
             versionInfo = import (disko + /version.nix);
