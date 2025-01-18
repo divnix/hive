@@ -1,13 +1,27 @@
-{nixpkgs}: {config, ...}: let
+{nixpkgs}: {
+  config,
+  modulesPath,
+  ...
+}: let
   l = nixpkgs.lib // builtins;
 
-  erase = optionName: instruction: {options, ...}: let
+  erase = optionName: instruction: exceptions: {
+    options,
+    modulesPath,
+    ...
+  }: let
     opt = l.getAttrFromPath optionName options;
   in {
     options = l.setAttrByPath optionName (l.mkOption {visible = false;});
     config.bee._alerts = [
       {
-        assertion = !opt.isDefined;
+        assertion =
+          !opt.isDefined
+          || (
+            if exceptions != []
+            then l.subtractLists opt.files exceptions == []
+            else false
+          );
         message = ''
           The option `${l.showOption optionName}' is not supported.
             Location: ${l.showFiles opt.files}
@@ -22,12 +36,15 @@
   };
 in {
   imports = [
-    (erase ["nixpkgs" "config"] "Please set 'config.bee.pkgs' to a fully configured nixpkgs.")
-    (erase ["nixpkgs" "overlays"] "Please set 'config.bee.pkgs' to a nixpkgs - overlays included.")
-    (erase ["nixpkgs" "system"] "Please set 'config.bee.system', instead.")
-    (erase ["nixpkgs" "localSystem"] "Please set 'config.bee.system', instead.")
-    (erase ["nixpkgs" "crossSystem"] "Please set 'config.bee.system', instead.")
-    (erase ["nixpkgs" "pkgs"] "Please set 'config.bee.pkgs' to an instantiated version of nixpkgs.")
+    (erase ["nixpkgs" "config"] "Please set 'config.bee.pkgs' to a fully configured nixpkgs." [])
+    (erase ["nixpkgs" "overlays"] "Please set 'config.bee.pkgs' to a nixpkgs - overlays included." [
+      # exceptions in upstream that we can't control
+      (modulesPath + "/profiles/installation-device.nix")
+    ])
+    (erase ["nixpkgs" "system"] "Please set 'config.bee.system', instead." [])
+    (erase ["nixpkgs" "localSystem"] "Please set 'config.bee.system', instead." [])
+    (erase ["nixpkgs" "crossSystem"] "Please set 'config.bee.system', instead." [])
+    (erase ["nixpkgs" "pkgs"] "Please set 'config.bee.pkgs' to an instantiated version of nixpkgs." [])
   ];
   options.bee = {
     _alerts = l.mkOption {
