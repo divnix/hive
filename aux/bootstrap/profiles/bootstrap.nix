@@ -63,7 +63,13 @@ in
         (pkgs.callPackage ifwifi {
           inherit (pkgs.darwin.apple_sdk.frameworks) Security;
         })
-        (pkgs.callPackage (disko + /package.nix) {})
+        (pkgs.callPackage (disko + /package.nix) {
+          diskoVersion = let
+            versionInfo = import (disko + /version.nix);
+            version = versionInfo.version + (optionalString (!versionInfo.released) "-dirty");
+          in
+            version;
+        })
       ];
 
       isoImage = {

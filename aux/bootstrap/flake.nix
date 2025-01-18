@@ -1,6 +1,4 @@
 {
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-
   inputs.disko = {
     url = "github:nix-community/disko";
     flake = false;
