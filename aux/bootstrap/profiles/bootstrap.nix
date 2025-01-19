@@ -33,19 +33,10 @@ in
 
       networking.domain = "local";
 
-      # Provide networkmanager for easy wireless configuration.
-      networking.networkmanager.enable = true;
-      networking.wireless.enable = mkForce false;
-      services.getty.helpLine =
-        ''
-          To format drives and install a system in one go, you can use diko, e.g.:
-            `disko-install --write-efi-boot-entries --flake <flake>#<config> --disk main /dev/...`
-        ''
-        + optionalString config.services.xserver.enable ''
-
-          Type `sudo systemctl start display-manager' to
-          start the graphical user interface.
-        '';
+      services.getty.helpLine = ''
+        To format drives and install a system in one go, you can use diko, e.g.:
+          `disko-install --write-efi-boot-entries --flake <flake>#<config> --disk main /dev/...`
+      '';
 
       environment.systemPackages = [
         (pkgs.callPackage (disko + /package.nix) {
