@@ -34,7 +34,7 @@ in
       networking.domain = "local";
 
       services.getty.helpLine = ''
-        To format drives and install a system in one go, you can use diko, e.g.:
+        To format drives and install a system in one go, you can use disko, e.g.:
           `disko-install --write-efi-boot-entries --flake <flake>#<config> --disk main /dev/...`
       '';
 
