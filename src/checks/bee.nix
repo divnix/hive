@@ -7,7 +7,7 @@
   inherit (root) beeModule;
 
   check = locatedConfig: let
-    checked = l.nixos.evalModules {
+    checked = l.evalModules {
       modules = [
         locatedConfig
         beeModule
@@ -16,6 +16,9 @@
           config._module.freeformType = l.types.unspecified;
         }
       ];
+      specialArgs = {
+        modulesPath = builtins.toString "${nixpkgs}/nixos/modules";
+      };
     };
 
     failedAsserts = map (x: x.message) (l.filter (x: !x.assertion) checked.config.bee._alerts);
